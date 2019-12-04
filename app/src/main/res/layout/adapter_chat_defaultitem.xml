@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="23px">
+
+    <TextView
+        android:id="@+id/tv_chatdefault_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="28px"
+        android:textColor="@color/white"
+        android:paddingLeft="75px"
+        android:paddingRight="40px"
+        android:paddingTop="16px"
+        android:paddingBottom="15px"
+        android:layout_marginRight="150px"
+        android:background="@drawable/chat_bg_left"
+        android:layout_marginLeft="47px"
+        android:layout_marginTop="58px"
+        android:lineSpacingExtra="10px"
+        />
+
+    <ImageView
+        android:layout_width="94px"
+        android:layout_height="126px"
+        android:src="@mipmap/icon_panda"
+        android:scaleType="fitXY"
+        />
+
+</RelativeLayout>

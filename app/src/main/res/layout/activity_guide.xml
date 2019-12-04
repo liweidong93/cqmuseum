@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@mipmap/bg_collection">
+
+    <RelativeLayout
+        android:layout_width="656px"
+        android:layout_height="match_parent"
+        android:background="@mipmap/bg_guide_left">
+
+        <ImageView
+            android:id="@+id/iv_guide_back"
+            android:layout_width="120px"
+            android:layout_height="60px"
+            android:layout_marginTop="14px"
+            android:layout_marginLeft="40px"
+            android:src="@mipmap/back"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="8px"
+            android:layout_alignRight="@+id/tv_guide_text"
+            android:layout_alignLeft="@+id/tv_guide_text"
+            android:src="@mipmap/icon_yellow"
+            android:layout_marginTop="102px"
+            android:scaleType="fitXY"
+            android:layout_below="@+id/iv_guide_back"
+            />
+
+        <TextView
+            android:id="@+id/tv_guide_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="63px"
+            android:layout_below="@+id/iv_guide_back"
+            android:layout_marginLeft="39px"
+            android:textSize="40px"
+            android:text="导航路线"
+            android:textColor="@color/white"
+            />
+
+        <TextView
+            android:id="@+id/tv_guide_switch"
+            android:layout_width="200px"
+            android:layout_height="80px"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="50px"
+            android:layout_alignTop="@id/tv_guide_text"
+            android:background="@drawable/corner_f69204"
+            android:textSize="36px"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:text="开始导航"/>
+
+        <ImageView
+            android:id="@+id/iv_guide_line"
+            android:layout_width="447px"
+            android:layout_height="470px"
+            android:background="@mipmap/bg_guide_line"
+            android:layout_below="@id/tv_guide_text"
+            android:layout_marginTop="211px"
+            android:layout_centerHorizontal="true"
+            />
+
+
+        <include
+            android:id="@+id/include_guide_point1"
+            layout="@layout/include_guidepoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_guide_text"
+            android:layout_marginTop="90px"
+            android:layout_marginLeft="50px"
+            />
+
+        <include
+            android:id="@+id/include_guide_point2"
+            layout="@layout/include_guidepoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_guide_text"
+            android:layout_marginTop="90px"
+            android:layout_centerHorizontal="true"/>
+
+        <include
+            android:id="@+id/include_guide_point3"
+            layout="@layout/include_guidepoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_guide_text"
+            android:layout_marginTop="90px"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="50px"/>
+
+        <include
+            android:id="@+id/include_guide_point4"
+            layout="@layout/include_guidepoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/include_guide_point3"
+            android:layout_marginTop="63px"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="50px"/>
+
+        <include
+            android:id="@+id/include_guide_point5"
+            layout="@layout/include_guidepoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/include_guide_point2"
+            android:layout_marginTop="63px"
+            android:layout_centerHorizontal="true"/>
+
+        <include
+            android:id="@+id/include_guide_point6"
+            layout="@layout/include_guidepoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/include_guide_point1"
+            android:layout_marginTop="63px"
+            android:layout_marginLeft="55px"/>
+
+        <include
+            android:id="@+id/include_guide_point7"
+            layout="@layout/include_guidepoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/include_guide_point6"
+            android:layout_marginTop="28px"
+            android:layout_marginLeft="55px"/>
+
+        <include
+            android:id="@+id/include_guide_point8"
+            layout="@layout/include_guidepoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/include_guide_point5"
+            android:layout_marginTop="28px"
+            android:layout_centerHorizontal="true"/>
+
+
+        <include
+            android:id="@+id/include_guide_point9"
+            layout="@layout/include_guidepoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/include_guide_point4"
+            android:layout_marginTop="28px"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="50px"/>
+
+
+
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent">
+        
+        <ImageView
+            android:id="@+id/iv_guide_guideicon"
+            android:layout_width="725px"
+            android:layout_height="557px"
+            android:src="@mipmap/icon_initguide"
+            android:layout_centerInParent="true"/>
+
+        <ImageView
+            android:id="@+id/iv_guide_pic"
+            android:layout_width="679px"
+            android:layout_height="512px"
+            android:scaleType="fitXY"
+            android:layout_marginTop="104px"
+            android:layout_marginLeft="77px"
+            android:visibility="gone"/>
+
+        <ScrollView
+            android:id="@+id/sv_guide_introduce"
+            android:layout_width="597px"
+            android:layout_height="440px"
+            android:layout_marginTop="478px"
+            android:layout_marginRight="46px"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/corner_10_white"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+                <TextView
+                    android:id="@+id/tv_guide_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30px"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="40px"
+                    android:textColor="@color/color_459469"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_guide_introduce"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_guide_name"
+                    android:textSize="32px"
+                    android:layout_marginTop="30px"
+                    android:layout_marginLeft="40px"
+                    android:layout_marginRight="40px"
+                    android:layout_marginBottom="50px"
+                    android:lineSpacingExtra="10px"
+                    />
+
+            </RelativeLayout>
+
+        </ScrollView>
+        
+        
+    </RelativeLayout>
+
+</LinearLayout>

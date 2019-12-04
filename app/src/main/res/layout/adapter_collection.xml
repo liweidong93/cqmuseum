@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="40px"
+    android:layout_marginRight="40px"
+    android:layout_marginBottom="38px"
+    >
+
+    <ImageView
+        android:id="@+id/iv_collectionadapter_pic"
+        android:layout_width="match_parent"
+        android:layout_height="360px"
+        android:scaleType="fitCenter"
+        android:background="@color/color_5BD8B1"/>
+
+    <TextView
+        android:id="@+id/tv_collectionadapter_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_1C905F"
+        android:textSize="28px"
+        android:layout_marginTop="19px"
+        android:layout_marginRight="24px"
+        android:layout_alignLeft="@+id/iv_collectionadapter_pic"
+        android:layout_below="@+id/iv_collectionadapter_pic"
+        />
+
+    <TextView
+        android:id="@+id/tv_collectionadapter_introduce"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_1C905F"
+        android:textSize="18px"
+        android:layout_marginTop="13px"
+        android:layout_marginRight="24px"
+        android:layout_alignLeft="@+id/tv_collectionadapter_name"
+        android:layout_below="@+id/tv_collectionadapter_name"
+        android:maxLines="2"
+        android:ellipsize="end"
+        />
+
+
+
+</RelativeLayout>

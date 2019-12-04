@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout android:id="@+id/tv_chatcollection_answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="37px"
+        >
+
+        <ImageView
+            android:id="@+id/iv_chatcollection_pic"
+            android:layout_width="400px"
+            android:layout_height="300px"
+            android:scaleType="fitXY"
+            android:layout_marginTop="37px"
+            android:layout_marginLeft="61px"/>
+
+        <TextView
+            android:id="@+id/tv_chatcollection_nametext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28px"
+            android:textColor="@color/color_02B68A"
+            android:text="名称："
+            android:paddingTop="2px"
+            android:paddingBottom="2px"
+            android:layout_marginLeft="58px"
+            android:layout_toRightOf="@+id/iv_chatcollection_pic"
+            android:layout_alignTop="@+id/iv_chatcollection_pic"/>
+
+        <TextView
+            android:id="@+id/tv_chatcollection_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="32px"
+            android:textStyle="bold"
+            android:textColor="@color/color_02B68A"
+            android:layout_toRightOf="@+id/tv_chatcollection_nametext"
+            android:layout_alignTop="@+id/tv_chatcollection_nametext"/>
+
+        <TextView
+            android:id="@+id/tv_chatcollection_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28px"
+            android:textColor="@color/color_02B68A"
+            android:text="类别："
+            android:layout_marginTop="22px"
+            android:layout_below="@+id/tv_chatcollection_nametext"
+            android:layout_alignLeft="@+id/tv_chatcollection_nametext"/>
+
+
+        <TextView
+            android:id="@+id/tv_chatcollection_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28px"
+            android:textColor="@color/color_02B68A"
+            android:text="产地："
+            android:singleLine="true"
+            android:layout_marginTop="22px"
+            android:layout_below="@+id/tv_chatcollection_type"
+            android:layout_alignLeft="@+id/tv_chatcollection_type"/>
+
+        <TextView
+            android:id="@+id/tv_chatcollection_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28px"
+            android:textColor="@color/color_02B68A"
+            android:text="地质年代："
+            android:layout_marginTop="22px"
+            android:layout_below="@+id/tv_chatcollection_location"
+            android:layout_alignLeft="@+id/tv_chatcollection_location"/>
+
+
+        <TextView
+            android:id="@+id/tv_chatcollection_inareatext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28px"
+            android:textColor="@color/color_02B68A"
+            android:text="分布地区："
+            android:layout_marginTop="19px"
+            android:layout_below="@+id/iv_chatcollection_pic"
+            android:layout_alignLeft="@+id/iv_chatcollection_pic"/>
+
+        <TextView
+            android:id="@+id/tv_chatcollection_inarea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28px"
+            android:textColor="@color/color_02B68A"
+            android:layout_toRightOf="@+id/tv_chatcollection_inareatext"
+            android:layout_alignTop="@+id/tv_chatcollection_inareatext"/>
+
+
+        <TextView
+            android:id="@+id/tv_chatcollection_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28px"
+            android:textColor="@color/color_02B68A"
+            android:text="体长："
+            android:layout_marginTop="19px"
+            android:layout_below="@+id/tv_chatcollection_inarea"
+            android:layout_alignLeft="@+id/tv_chatcollection_inareatext"/>
+
+        <TextView
+            android:id="@+id/tv_chatcollection_feed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28px"
+            android:textColor="@color/color_02B68A"
+            android:text="食性："
+            android:layout_marginTop="19px"
+            android:layout_below="@+id/tv_chatcollection_body"
+            android:layout_alignLeft="@+id/tv_chatcollection_body"/>
+
+        <TextView
+            android:id="@+id/tv_chatcollection_introducetext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28px"
+            android:textColor="@color/color_02B68A"
+            android:text="简介："
+            android:layout_marginTop="19px"
+            android:layout_below="@+id/tv_chatcollection_feed"
+            android:layout_alignLeft="@+id/tv_chatcollection_feed"/>
+
+        <TextView
+            android:id="@+id/tv_chatcollection_introduce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28px"
+            android:textColor="@color/color_02B68A"
+            android:layout_marginRight="61px"
+            android:layout_toRightOf="@+id/tv_chatcollection_introducetext"
+            android:layout_alignTop="@+id/tv_chatcollection_introducetext"/>
+
+
+    </RelativeLayout>
+
+</ScrollView>

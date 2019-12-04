@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="23px">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="75px"
+        android:paddingRight="40px"
+        android:paddingTop="16px"
+        android:paddingBottom="15px"
+        android:layout_marginRight="150px"
+        android:background="@drawable/chat_bg_left"
+        android:layout_marginLeft="47px"
+        android:layout_marginTop="58px">
+
+        <TextView
+            android:id="@+id/tv_chatpanda_answer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28px"
+            android:textColor="@color/white"
+            android:lineSpacingExtra="10px"
+            />
+
+        <LinearLayout
+            android:id="@+id/ll_chatpanda_suggestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_chatpanda_answer"
+            android:layout_marginTop="40px"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30px"
+                android:textColor="@color/color_72e437"
+                android:text="您可以这样问我："/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_chatpanda_suggestionlist"
+                android:layout_marginTop="20px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <ImageView
+        android:layout_width="94px"
+        android:layout_height="126px"
+        android:src="@mipmap/icon_panda"
+        android:scaleType="fitXY"
+        />
+
+</RelativeLayout>

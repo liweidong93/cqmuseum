@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="23px">
+
+    <RelativeLayout
+        android:id="@+id/tv_chatcollection_answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="150px"
+        android:background="@drawable/chat_bg_left"
+        android:layout_marginLeft="47px"
+        android:layout_marginTop="58px"
+        android:paddingBottom="37px"
+        android:paddingRight="61px"
+        >
+
+        <ImageView
+            android:id="@+id/iv_chatcollection_pic"
+            android:layout_width="340px"
+            android:layout_height="200px"
+            android:scaleType="fitXY"
+            android:layout_marginTop="37px"
+            android:layout_marginLeft="61px"/>
+
+        <TextView
+            android:id="@+id/tv_chatcollection_nametext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:paddingTop="2px"
+            android:paddingBottom="2px"
+            android:text="名称："
+            android:layout_marginLeft="58px"
+            android:layout_toRightOf="@+id/iv_chatcollection_pic"
+            android:layout_alignTop="@+id/iv_chatcollection_pic"/>
+
+
+
+        <TextView
+            android:id="@+id/tv_chatcollection_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28px"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_marginRight="170px"
+            android:layout_toRightOf="@+id/tv_chatcollection_nametext"
+            android:layout_alignTop="@+id/tv_chatcollection_nametext"/>
+
+        <TextView
+            android:id="@+id/tv_chatcollection_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="查看更多>>"
+            android:textSize="28px"
+            android:textColor="#ffd200"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/tv_chatcollection_name"/>
+
+        <TextView
+            android:id="@+id/tv_chatcollection_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:text="类别："
+            android:layout_marginTop="22px"
+            android:layout_below="@+id/tv_chatcollection_nametext"
+            android:layout_alignLeft="@+id/tv_chatcollection_nametext"/>
+
+
+        <TextView
+            android:id="@+id/tv_chatcollection_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:text="产地："
+            android:singleLine="true"
+            android:layout_marginTop="22px"
+            android:layout_below="@+id/tv_chatcollection_type"
+            android:layout_alignLeft="@+id/tv_chatcollection_type"/>
+
+        <TextView
+            android:id="@+id/tv_chatcollection_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:text="地质年代："
+            android:layout_marginTop="22px"
+            android:layout_below="@+id/tv_chatcollection_location"
+            android:layout_alignLeft="@+id/tv_chatcollection_location"/>
+
+
+        <TextView
+            android:id="@+id/tv_chatcollection_inareatext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:text="分布地区："
+            android:layout_marginTop="19px"
+            android:layout_below="@+id/iv_chatcollection_pic"
+            android:layout_alignLeft="@+id/iv_chatcollection_pic"/>
+
+        <TextView
+            android:id="@+id/tv_chatcollection_inarea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:layout_toRightOf="@+id/tv_chatcollection_inareatext"
+            android:layout_alignTop="@+id/tv_chatcollection_inareatext"/>
+
+
+        <TextView
+            android:id="@+id/tv_chatcollection_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:text="体长："
+            android:layout_marginTop="19px"
+            android:layout_below="@+id/tv_chatcollection_inarea"
+            android:layout_alignLeft="@+id/tv_chatcollection_inareatext"/>
+
+        <TextView
+            android:id="@+id/tv_chatcollection_feed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:text="食性："
+            android:layout_marginTop="19px"
+            android:layout_below="@+id/tv_chatcollection_body"
+            android:layout_alignLeft="@+id/tv_chatcollection_body"/>
+
+        <TextView
+            android:id="@+id/tv_chatcollection_introducetext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:text="简介："
+            android:layout_marginTop="19px"
+            android:layout_below="@+id/tv_chatcollection_feed"
+            android:layout_alignLeft="@+id/tv_chatcollection_feed"/>
+
+        <TextView
+            android:id="@+id/tv_chatcollection_introduce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:layout_toRightOf="@+id/tv_chatcollection_introducetext"
+            android:layout_alignTop="@+id/tv_chatcollection_introducetext"/>
+
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="94px"
+        android:layout_height="126px"
+        android:src="@mipmap/icon_panda"
+        android:scaleType="fitXY"
+        />
+
+</RelativeLayout>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg_collection"
+    tools:context="com.cnki.cqmuseum.ui.collection.CollectDetailActivity">
+
+    <ImageView
+        android:id="@+id/iv_collectiondetail_back"
+        android:layout_width="120px"
+        android:layout_height="60px"
+        android:layout_marginTop="14px"
+        android:layout_marginLeft="40px"
+        android:src="@mipmap/back"/>
+
+    <ImageView
+        android:id="@+id/iv_collectiondetail_pic"
+        android:layout_width="950px"
+        android:layout_height="680px"
+        android:src="@mipmap/test"
+        android:layout_marginLeft="33px"
+        android:layout_centerVertical="true"
+        android:scaleType="fitXY"
+        />
+
+    <ScrollView
+        android:id="@+id/sv_collectiondetail_content"
+        android:layout_width="785px"
+        android:layout_height="550px"
+        android:background="@drawable/corner_10_white"
+        android:layout_centerVertical="true"
+        android:fadeScrollbars="false"
+        android:layout_marginLeft="950px">
+
+        <RelativeLayout
+            android:id="@+id/rl_collectiondetail_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingRight="60px"
+            >
+
+            <TextView
+                android:id="@+id/tv_collectiondetail_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50px"
+                android:layout_marginLeft="80px"
+                android:textSize="32px"
+                android:textColor="@color/color_459469"
+                android:text="合川马门溪龙"
+                />
+
+            <TextView
+                android:id="@+id/tv_collectiondetail_produce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_collectiondetail_name"
+                android:layout_alignLeft="@id/tv_collectiondetail_name"
+                android:textSize="24px"
+                android:layout_marginTop="31px"
+                android:text="产地：重庆合川"/>
+
+            <TextView
+                android:id="@+id/tv_collectiondetail_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_collectiondetail_produce"
+                android:layout_alignLeft="@id/tv_collectiondetail_produce"
+                android:textSize="24px"
+                android:layout_marginTop="31px"
+                android:text="地质年代：晚侏罗纪"/>
+
+            <TextView
+                android:id="@+id/tv_collectiondetail_inareatext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_collectiondetail_time"
+                android:layout_alignLeft="@id/tv_collectiondetail_time"
+                android:textSize="24px"
+                android:layout_marginTop="31px"
+                android:text="分布地区："/>
+
+            <TextView
+                android:id="@+id/tv_collectiondetail_inarea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tv_collectiondetail_inareatext"
+                android:layout_alignTop="@+id/tv_collectiondetail_inareatext"
+                android:textSize="24px"
+                android:text="国内分布于..."/>
+
+            <TextView
+                android:id="@+id/tv_collectiondetail_body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_collectiondetail_inareatext"
+                android:layout_alignLeft="@id/tv_collectiondetail_inareatext"
+                android:textSize="24px"
+                android:layout_marginTop="31px"
+                android:text="体长：身长1-2米"/>
+
+            <TextView
+                android:id="@+id/tv_collectiondetail_feed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_collectiondetail_body"
+                android:layout_alignLeft="@id/tv_collectiondetail_body"
+                android:textSize="24px"
+                android:layout_marginTop="31px"
+                android:text="食性：肉食性恐龙"/>
+
+            <TextView
+                android:id="@+id/tv_collectiondetail_men"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_collectiondetail_feed"
+                android:layout_alignLeft="@id/tv_collectiondetail_feed"
+                android:textSize="24px"
+                android:layout_marginTop="31px"
+                android:text="门：脊索动物门"/>
+
+            <TextView
+                android:id="@+id/tv_collectiondetail_gang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_collectiondetail_men"
+                android:layout_alignLeft="@id/tv_collectiondetail_men"
+                android:textSize="24px"
+                android:layout_marginTop="31px"
+                android:text="纲：哺乳纲"/>
+
+            <TextView
+                android:id="@+id/tv_collectiondetail_mu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_collectiondetail_gang"
+                android:layout_alignLeft="@id/tv_collectiondetail_gang"
+                android:textSize="24px"
+                android:layout_marginTop="31px"
+                android:text="目：灵长目"/>
+
+            <TextView
+                android:id="@+id/tv_collectiondetail_ke"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_collectiondetail_mu"
+                android:layout_alignLeft="@id/tv_collectiondetail_mu"
+                android:textSize="24px"
+                android:layout_marginTop="31px"
+                android:text="科：猴科"/>
+
+            <TextView
+                android:id="@+id/tv_collectiondetail_shu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_collectiondetail_ke"
+                android:layout_alignLeft="@id/tv_collectiondetail_ke"
+                android:textSize="24px"
+                android:layout_marginTop="31px"
+                android:text="属：叶猴属"/>
+
+            <TextView
+                android:id="@+id/tv_collectiondetail_introducetext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_collectiondetail_shu"
+                android:layout_alignLeft="@id/tv_collectiondetail_shu"
+                android:textSize="24px"
+                android:layout_marginTop="31px"
+                android:text="简介："/>
+
+            <TextView
+                android:id="@+id/tv_collectiondetail_introduce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tv_collectiondetail_introducetext"
+                android:layout_alignTop="@+id/tv_collectiondetail_introducetext"
+                android:textSize="24px"
+                android:layout_marginBottom="50px"
+                android:text="该人科化石被命名为直立人，俗称巫山猿人。据2015年ESR测年法测得龙骨坡遗址含人科化石的第8堆积地层的绝对年龄，为距今220万年，含石制品的第12堆积地层年龄，为250万年，这是迄今为止欧亚大陆时代最早、内涵最丰富的古人类遗址。"
+                />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>

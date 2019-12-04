@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="750px"
+    android:layout_height="470px"
+    android:background="@mipmap/bg_updateapk"
+    >
+
+    <TextView
+        android:id="@+id/tv_updateapk_updatecontent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="32px"
+        android:textColor="@color/color_3a3d41"
+        android:paddingTop="80px"
+        android:text="东南大学图书馆\n版本号：V2.0"/>
+
+    <ImageView
+        android:id="@+id/iv_updateapk_update"
+        android:layout_width="match_parent"
+        android:layout_height="80px"
+        android:layout_marginLeft="125px"
+        android:layout_marginRight="125px"
+        android:layout_marginBottom="40px"
+        android:layout_alignParentBottom="true"
+        android:src="@mipmap/update_apk"/>
+    
+    <ImageView
+        android:id="@+id/iv_updateapk_close"
+        android:layout_width="40px"
+        android:layout_height="40px"
+        android:scaleType="fitXY"
+        android:src="@mipmap/icon_no"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="24px"
+        android:layout_marginRight="24px"/>
+
+
+</RelativeLayout>

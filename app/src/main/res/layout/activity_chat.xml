@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@mipmap/bgchat"
+    android:id="@+id/rl_chat_rootview"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/rl_pandachat_normal"
+        android:layout_width="567px"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:background="@color/color_60037A5D">
+
+        <ImageView
+            android:id="@+id/iv_main_roboticon"
+            android:layout_width="120px"
+            android:layout_height="160px"
+            android:src="@mipmap/icon_panda"
+            android:layout_marginTop="85px"
+            android:layout_marginLeft="31px"/>
+
+        <ImageView
+            android:layout_width="301px"
+            android:layout_height="60px"
+            android:src="@mipmap/robot_say"
+            android:scaleType="fitXY"
+            android:layout_toRightOf="@+id/iv_main_roboticon"
+            android:layout_alignTop="@+id/iv_main_roboticon"
+            android:layout_marginTop="35px"
+            android:layout_marginLeft="6px"/>
+
+        <TextView
+            android:id="@+id/tv_main_title1"
+            android:layout_width="wrap_content"
+            android:layout_height="48px"
+            android:maxWidth="380px"
+            android:textColor="@color/white"
+            android:textSize="28px"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:text="红楼梦在哪里可以借"
+            android:layout_below="@+id/iv_main_roboticon"
+            android:layout_marginTop="45px"
+            android:background="@drawable/stroken_white_corner40"
+            android:paddingLeft="30px"
+            android:paddingRight="30px"
+            android:gravity="center"
+            android:layout_marginLeft="50px"
+            android:onClick="onClick"
+            />
+
+        <TextView
+            android:id="@+id/tv_main_title2"
+            android:layout_width="wrap_content"
+            android:layout_height="48px"
+            android:maxWidth="380px"
+            android:textColor="@color/white"
+            android:textSize="28px"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:text="读书卡怎么办理"
+            android:layout_below="@+id/tv_main_title1"
+            android:layout_marginTop="32px"
+            android:background="@drawable/stroken_white_corner40"
+            android:paddingLeft="30px"
+            android:paddingRight="30px"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="37px"
+            android:onClick="onClick"
+            />
+
+        <TextView
+            android:id="@+id/tv_main_title3"
+            android:layout_width="wrap_content"
+            android:layout_height="48px"
+            android:maxWidth="380px"
+            android:textColor="@color/white"
+            android:textSize="28px"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:text="卫生间在哪里"
+            android:layout_below="@+id/tv_main_title2"
+            android:layout_marginTop="32px"
+            android:background="@drawable/stroken_white_corner40"
+            android:paddingLeft="30px"
+            android:paddingRight="30px"
+            android:gravity="center"
+            android:layout_marginLeft="50px"
+            android:onClick="onClick"
+            />
+
+        <TextView
+            android:id="@+id/tv_main_title4"
+            android:layout_width="wrap_content"
+            android:layout_height="48px"
+            android:maxWidth="380px"
+            android:textColor="@color/white"
+            android:textSize="28px"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:text="几点关门"
+            android:layout_below="@+id/tv_main_title3"
+            android:layout_marginTop="32px"
+            android:background="@drawable/stroken_white_corner40"
+            android:paddingLeft="30px"
+            android:paddingRight="30px"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="37px"
+            android:onClick="onClick"
+            />
+
+        <TextView
+            android:id="@+id/tv_main_title5"
+            android:layout_width="wrap_content"
+            android:layout_height="48px"
+            android:maxWidth="380px"
+            android:textColor="@color/white"
+            android:textSize="28px"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:text="卫生间在哪里"
+            android:layout_below="@+id/tv_main_title4"
+            android:layout_marginTop="32px"
+            android:background="@drawable/stroken_white_corner40"
+            android:paddingLeft="30px"
+            android:paddingRight="30px"
+            android:gravity="center"
+            android:layout_marginLeft="50px"
+            android:onClick="onClick"
+            />
+
+        <TextView
+            android:id="@+id/tv_main_title6"
+            android:layout_width="wrap_content"
+            android:layout_height="48px"
+            android:maxWidth="380px"
+            android:textColor="@color/white"
+            android:textSize="28px"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:text="几点关门"
+            android:layout_below="@+id/tv_main_title5"
+            android:layout_marginTop="32px"
+            android:background="@drawable/stroken_white_corner40"
+            android:paddingLeft="30px"
+            android:paddingRight="30px"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="37px"
+            android:onClick="onClick"
+            />
+
+        <TextView
+            android:id="@+id/tv_main_title7"
+            android:layout_width="wrap_content"
+            android:layout_height="48px"
+            android:maxWidth="380px"
+            android:textColor="@color/white"
+            android:textSize="28px"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:text="卫生间在哪里"
+            android:layout_below="@+id/tv_main_title6"
+            android:layout_marginTop="32px"
+            android:background="@drawable/stroken_white_corner40"
+            android:paddingLeft="30px"
+            android:paddingRight="30px"
+            android:gravity="center"
+            android:layout_marginLeft="50px"
+            android:onClick="onClick"
+            />
+
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_pandachat_panda"
+        android:layout_width="567px"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:background="@color/color_400045CD"
+        android:visibility="gone">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_pandachat_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="150px"
+            android:layout_marginBottom="80px">
+
+
+        </android.support.v7.widget.RecyclerView>
+
+
+    </RelativeLayout>
+
+    <!--title-->
+    <RelativeLayout
+        android:id="@+id/rl_main_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_chartheader_back"
+            android:layout_width="120px"
+            android:layout_height="60px"
+            android:layout_marginTop="14px"
+            android:layout_marginLeft="40px"
+            android:src="@mipmap/back"/>
+
+        <ImageView
+            android:id="@+id/iv_chartheader_clear"
+            android:layout_width="120px"
+            android:layout_height="60px"
+            android:layout_marginRight="37px"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/iv_chartheader_back"
+            android:src="@mipmap/clear"/>
+
+        <ImageView
+            android:id="@+id/iv_chartheader_switch"
+            android:layout_width="120px"
+            android:layout_height="60px"
+            android:layout_toLeftOf="@+id/iv_chartheader_clear"
+            android:layout_alignTop="@+id/iv_chartheader_clear"
+            android:layout_marginRight="40px"
+            android:scaleType="fitXY"
+            android:src="@mipmap/switchicon_open"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_below="@+id/rl_main_title"
+        android:layout_marginRight="567px"
+        android:layout_marginBottom="10px">
+
+        <!--左边布局  对话框-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_chat_chatview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="64px"
+                android:layout_marginRight="25px"
+                android:paddingBottom="40px"
+                />
+
+            <!--下面输入问题-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80px"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="40px"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/input_et"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:paddingLeft="34px"
+                    android:paddingRight="34px"
+                    android:gravity="center_vertical"
+                    android:layout_toLeftOf="@+id/commit_btn"
+                    android:hint="@string/input_hint"
+                    android:textColorHint="@color/color_d8d8d8"
+                    android:textSize="30px"
+                    android:textColor="@color/color_303030"
+                    />
+
+                <TextView
+                    android:id="@+id/commit_btn"
+                    android:layout_width="155px"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10px"
+                    android:layout_marginRight="7px"
+                    android:textColor="@color/white"
+                    android:textSize="40px"
+                    android:text="提问"
+                    android:gravity="center"
+                    android:background="@drawable/coner10_blue"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

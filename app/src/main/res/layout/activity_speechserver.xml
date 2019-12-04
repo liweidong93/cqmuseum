@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg_speechserver">
+
+    <ImageView
+        android:id="@+id/iv_speechserver_back"
+        android:layout_width="120px"
+        android:layout_height="60px"
+        android:layout_marginTop="14px"
+        android:layout_marginLeft="40px"
+        android:src="@mipmap/back"/>
+
+    <TextView
+        android:id="@+id/tv_speechserver_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="115px"
+        android:textSize="40px"
+        android:textColor="@color/color_34B088"
+        android:text="@string/title_speechserver"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_speechserver_title"
+        android:layout_marginTop="50px">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_speechserver_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="229px"
+                android:layout_marginRight="229px">
+
+
+            </android.support.v7.widget.RecyclerView>
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="80px"/>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+</RelativeLayout>

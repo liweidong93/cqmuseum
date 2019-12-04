@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">重庆自然博物馆</string>
+    <string name="input_hint">您好！输入框在这里哦，您可以输入想要咨询的问题，我来为您解答哦！</string>
+    <string name="collection_hint">点我输入文物名</string>
+    <string name="title_speechserver">博物馆历史</string>
+
+</resources>

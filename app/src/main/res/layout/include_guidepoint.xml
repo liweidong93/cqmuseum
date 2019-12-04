@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:onClick="onClick"
+    >
+
+    <ImageView
+        android:id="@+id/iv_guide_robot"
+        android:layout_width="50px"
+        android:layout_height="95px"
+        android:src="@mipmap/icon_guiderobot"
+        android:layout_below="@id/tv_guide_text"
+        android:layout_centerHorizontal="true"
+        />
+
+
+    <ImageView
+        android:id="@+id/iv_guide_point"
+        android:layout_width="23px"
+        android:layout_height="23px"
+        android:background="@drawable/stroken_2_red"
+        android:layout_below="@id/iv_guide_robot"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15px"
+        android:layout_marginLeft="89px"/>
+
+    <TextView
+        android:id="@+id/tv_guide_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18px"
+        android:textSize="28px"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/iv_guide_point"
+        android:text="起点"/>
+
+</RelativeLayout>

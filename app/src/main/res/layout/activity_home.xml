@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.cnki.cqmuseum.ui.home.HomeActivity"
+    android:background="@mipmap/bg_home">
+
+
+    <ImageView
+        android:id="@+id/iv_home_panda"
+        android:layout_width="163px"
+        android:layout_height="219px"
+        android:layout_marginTop="84px"
+        android:layout_marginLeft="327px"
+        android:src="@mipmap/icon_panda"/>
+
+    <ImageView
+        android:layout_width="784px"
+        android:layout_height="77px"
+        android:src="@mipmap/icon_speak"
+        android:layout_toRightOf="@id/iv_home_panda"
+        android:layout_marginLeft="12px"
+        android:layout_alignTop="@+id/iv_home_panda"
+        android:layout_marginTop="85px"/>
+
+    <ImageView
+        android:id="@+id/iv_home_guide"
+        android:layout_width="520px"
+        android:layout_height="251px"
+        android:src="@mipmap/icon_guide"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="335px"
+        android:layout_marginRight="46px"
+        android:onClick="onClick"/>
+
+
+    <ImageView
+        android:id="@+id/iv_home_pandatime"
+        android:layout_width="520px"
+        android:layout_height="251px"
+        android:src="@mipmap/icon_pandatime"
+        android:layout_toLeftOf="@id/iv_home_guide"
+        android:layout_marginRight="84px"
+        android:layout_alignTop="@id/iv_home_guide"
+        android:onClick="onClick"/>
+
+    <ImageView
+        android:id="@+id/iv_home_collection"
+        android:layout_width="520px"
+        android:layout_height="251px"
+        android:src="@mipmap/icon_collection"
+        android:layout_below="@id/iv_home_pandatime"
+        android:layout_marginTop="53px"
+        android:layout_alignLeft="@+id/iv_home_pandatime"
+        android:onClick="onClick"/>
+
+    <ImageView
+        android:id="@+id/iv_home_help"
+        android:layout_width="520px"
+        android:layout_height="251px"
+        android:src="@mipmap/icon_help"
+        android:layout_toRightOf="@+id/iv_home_collection"
+        android:layout_alignTop="@id/iv_home_collection"
+        android:layout_alignLeft="@+id/iv_home_guide"
+        android:onClick="onClick"/>
+
+    <ImageView
+        android:id="@+id/iv_home_speakserver"
+        android:layout_width="163px"
+        android:layout_height="297px"
+        android:layout_marginRight="164px"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/icon_speakserver"
+        android:onClick="onClick"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_home_questionlist"
+        android:layout_width="match_parent"
+        android:layout_height="400px"
+        android:layout_marginTop="102px"
+        android:layout_below="@+id/iv_home_panda"
+        android:layout_toLeftOf="@+id/iv_home_pandatime"
+        android:layout_marginRight="60px"
+        android:layout_marginLeft="220px"
+        >
+    </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

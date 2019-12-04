@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg_collectiondetail"
+    android:orientation="horizontal">
+    
+    <RelativeLayout
+        android:layout_width="570px"
+        android:layout_height="match_parent"
+        android:background="@mipmap/collection_left">
+
+        <ImageView
+            android:id="@+id/iv_collection_back"
+            android:layout_width="120px"
+            android:layout_height="60px"
+            android:layout_marginTop="14px"
+            android:layout_marginLeft="40px"
+            android:src="@mipmap/back"/>
+
+        <LinearLayout
+            android:id="@+id/rl_collection_input"
+            android:layout_width="333px"
+            android:layout_height="60px"
+            android:layout_marginTop="132px"
+            android:layout_marginLeft="43px"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:background="@drawable/corner_10_white"
+            >
+
+            <EditText
+                android:id="@+id/et_collection_input"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:textColorHint="@color/color_DFDFDF"
+                android:textColor="@color/color_303030"
+                android:hint="@string/collection_hint"
+                android:gravity="center_vertical"
+                android:background="@null"
+                android:textSize="28px"
+                android:singleLine="true"
+                android:paddingLeft="15px"
+                android:scrollHorizontally="true"
+                />
+
+            <ImageView
+                android:id="@+id/iv_collection_delete"
+                android:layout_width="30px"
+                android:layout_height="30px"
+                android:layout_marginRight="15px"
+                android:layout_marginLeft="15px"
+                android:src="@mipmap/icon_delete"
+                android:visibility="gone"
+                />
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/iv_collection_voice"
+            android:layout_width="140px"
+            android:layout_height="60px"
+            android:src="@mipmap/icon_voice"
+            android:scaleType="fitXY"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30px"
+            android:layout_alignTop="@id/rl_collection_input"
+            android:layout_alignBottom="@+id/rl_collection_input"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="8px"
+            android:layout_alignRight="@+id/tv_collection_typetext"
+            android:layout_alignLeft="@+id/tv_collection_typetext"
+            android:src="@mipmap/icon_yellow"
+            android:layout_marginTop="109px"
+            android:layout_below="@+id/rl_collection_input"
+            />
+
+        <TextView
+            android:id="@+id/tv_collection_typetext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70px"
+            android:layout_below="@+id/rl_collection_input"
+            android:layout_marginLeft="54px"
+            android:textSize="40px"
+            android:text="分类"
+            android:textColor="@color/white"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_collection_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_collection_typetext"
+            android:paddingLeft="75px"
+            android:paddingRight="70px"
+            >
+
+
+        </android.support.v7.widget.RecyclerView>
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.jude.easyrecyclerview.EasyRecyclerView
+            android:id="@+id/easyrv_collection_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="34px"
+            android:layout_marginRight="105px"
+            android:paddingTop="39px"
+            >
+
+
+        </com.jude.easyrecyclerview.EasyRecyclerView>
+
+    </LinearLayout>
+
+</LinearLayout>
