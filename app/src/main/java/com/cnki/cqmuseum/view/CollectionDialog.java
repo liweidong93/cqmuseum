@@ -2,6 +2,7 @@ package com.cnki.cqmuseum.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -59,7 +60,7 @@ public class CollectionDialog extends Dialog {
         Window dialogWindow = getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         DisplayMetrics d = mContext.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
-        lp.width = 1000; // 宽度设置为屏幕的0.8
+        lp.width = 1200; // 宽度设置为屏幕的0.8
         lp.height = 800; // 高度设置为屏幕的0.4
         dialogWindow.setWindowAnimations(R.style.dialogWindowAnim);
         dialogWindow.setAttributes(lp);
@@ -84,12 +85,24 @@ public class CollectionDialog extends Dialog {
     private void init(View view){
         mViewPager = view.findViewById(R.id.vp_collectiondialog_view);
         mImageViewClose = view.findViewById(R.id.iv_collectiondialog_close);
+        final ImageView mImageViewLeft = view.findViewById(R.id.iv_collectiondialog_left);
+        AnimationDrawable leftAnimDrawable = (AnimationDrawable) mImageViewLeft.getBackground();
+        leftAnimDrawable.start();
+        final ImageView mImageViewRight = view.findViewById(R.id.iv_collectiondialog_right);
+        AnimationDrawable rightAnimDrawable = (AnimationDrawable) mImageViewRight.getBackground();
+        rightAnimDrawable.start();
         mImageViewClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 CollectionDialog.this.dismiss();
             }
         });
+        if (answerItem.kNodeItems.size() == 1){
+            mImageViewLeft.setVisibility(View.GONE);
+            mImageViewRight.setVisibility(View.GONE);
+        }else{
+            mImageViewLeft.setVisibility(View.GONE);
+        }
         CollectionVPAdapter mAdapter = new CollectionVPAdapter(mContext, answerItem.kNodeItems);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -104,6 +117,16 @@ public class CollectionDialog extends Dialog {
                 RobotManager.stopSpeech();
                 if (!TextUtils.isEmpty(answerItem.kNodeItems.get(i).dataItems.get(0).fieldValue.introduce)){
                     RobotManager.speechVoice(answerItem.kNodeItems.get(i).dataItems.get(0).fieldValue.introduce);
+                }
+                if (i == 0){
+                    mImageViewLeft.setVisibility(View.GONE);
+                    mImageViewRight.setVisibility(View.VISIBLE);
+                }else if (i == answerItem.kNodeItems.size() -1){
+                    mImageViewLeft.setVisibility(View.VISIBLE);
+                    mImageViewRight.setVisibility(View.GONE);
+                }else{
+                    mImageViewLeft.setVisibility(View.VISIBLE);
+                    mImageViewRight.setVisibility(View.VISIBLE);
                 }
             }
 
