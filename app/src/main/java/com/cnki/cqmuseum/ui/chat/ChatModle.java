@@ -33,6 +33,8 @@ public class ChatModle {
         if (answerItem != null && answerItem.Domain.equals("熊猫")){
             if (answerItem.intent_domain.equals("精品文物")){
                 answerItem.viewType = ChatViewTypeConstant.VIEWTYPE_COLLECTION;
+            }else if (answerItem.intent_domain.equals("熊猫")){//熊猫知识库
+                answerItem.viewType = ChatViewTypeConstant.VIEWTYPE_PANDA_KNOWLWDGE;
             }else{
                 answerItem.viewType = ChatViewTypeConstant.VIEWTYPE_DEFAULT;
             }

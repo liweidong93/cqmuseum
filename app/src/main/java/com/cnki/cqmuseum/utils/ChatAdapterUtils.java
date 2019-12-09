@@ -12,6 +12,7 @@ import com.cnki.cqmuseum.ui.chat.ChatPresenter;
 import com.cnki.cqmuseum.viewholder.BaseViewHolder;
 import com.cnki.cqmuseum.viewholder.CollectionViewHolder;
 import com.cnki.cqmuseum.viewholder.DefaultViewHolder;
+import com.cnki.cqmuseum.viewholder.PandaKnowledgeViewHolder;
 import com.cnki.cqmuseum.viewholder.PandaViewHolder;
 import com.cnki.cqmuseum.viewholder.QuestionViewHolder;
 
@@ -42,6 +43,8 @@ public class ChatAdapterUtils {
                 return new CollectionViewHolder(LayoutInflater.from(context).inflate(R.layout.adapter_chat_collectionitem, parent, false));
             case ChatViewTypeConstant.VIEWTYPE_PANDA:
                 return new PandaViewHolder(LayoutInflater.from(context).inflate(R.layout.adapter_chatpanda, parent, false));
+            case ChatViewTypeConstant.VIEWTYPE_PANDA_KNOWLWDGE:
+                return new PandaKnowledgeViewHolder(LayoutInflater.from(context).inflate(R.layout.adapter_chat_pandaknowledge, parent, false));
             default://默认答案布局
                 return new DefaultViewHolder(LayoutInflater.from(context).inflate(R.layout.adapter_chat_defaultitem, parent, false));
         }

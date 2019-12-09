@@ -129,6 +129,13 @@ public class ChatPresenter extends BasePresenterImpl<IChatView> {
             case ChatViewTypeConstant.VIEWTYPE_COLLECTION:
                 RobotManager.stopSpeech();
                 break;
+            case ChatViewTypeConstant.VIEWTYPE_PANDA_KNOWLWDGE:
+                if (answerItem.kNodeItems != null && answerItem.kNodeItems.size() != 0 && answerItem.kNodeItems.get(0).dataItems != null
+                        && answerItem.kNodeItems.get(0).dataItems.size() != 0 && answerItem.kNodeItems.get(0).dataItems.get(0).fieldValue != null){
+                    RobotManager.stopSpeech();
+                    RobotManager.speechVoice(answerItem.kNodeItems.get(0).dataItems.get(0).fieldValue.introduce);
+                }
+                break;
             default:
                 //默认类别，去掉html节点
                 if (!TextUtils.isEmpty(answerItem.Answer)){

@@ -11,9 +11,12 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -60,7 +63,15 @@ public class CollectionDialog extends Dialog {
         Window dialogWindow = getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         DisplayMetrics d = mContext.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
-        lp.width = 1200; // 宽度设置为屏幕的0.8
+        RelativeLayout.LayoutParams vpParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        if (answerItem.kNodeItems.size() == 1){
+            lp.width = 1000; // 宽度设置为屏幕的0.8
+            vpParams.setMargins(0, 0, 0, 0);
+        }else{
+            lp.width = 1200; // 宽度设置为屏幕的0.8
+            vpParams.setMargins(100, 0, 100, 0);
+        }
+        mViewPager.setLayoutParams(vpParams);
         lp.height = 800; // 高度设置为屏幕的0.4
         dialogWindow.setWindowAnimations(R.style.dialogWindowAnim);
         dialogWindow.setAttributes(lp);

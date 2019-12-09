@@ -10,4 +10,5 @@ public class ChatViewTypeConstant {
     public static final int VIEWTYPE_DEFAULT = 1;//默认答案布局
     public static final int VIEWTYPE_COLLECTION = 2;//精品文物
     public static final int VIEWTYPE_PANDA = 3;//熊猫时代业务问答
+    public static final int VIEWTYPE_PANDA_KNOWLWDGE = 4;//熊猫知识库
 }

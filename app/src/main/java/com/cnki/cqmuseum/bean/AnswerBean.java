@@ -67,7 +67,7 @@ public class AnswerBean {
                     @SerializedName(value = "类别")
                     public String type;
                     @SerializedName(value = "体长")
-                    public String body;
+                    public String bodylength;
                     @SerializedName(value = "地质年代")
                     public String time;
                     @SerializedName(value = "食性")
@@ -76,6 +76,38 @@ public class AnswerBean {
                     public String inarea;
                     @SerializedName(value = "编号")
                     public String num;
+
+                    //熊猫知识库
+                    @SerializedName(value = "伪拇指")
+                    public String figures;
+                    @SerializedName(value = "化石")
+                    public String fossil;
+                    @SerializedName(value = "咀嚼肌")
+                    public String muscle;
+                    @SerializedName(value = "地址")
+                    public String address;
+                    @SerializedName(value = "头骨")
+                    public String skull;
+//                    @SerializedName(value = "始发期")
+//                    public String periodTime;
+                    @SerializedName(value = "属性")
+                    public String attributes;
+                    @SerializedName("年代")
+                    public String age;
+//                    @SerializedName(value = "成长期")
+//                    public String growTime;
+//                    @SerializedName(value = "来源")
+//                    public String fromBy;
+                    @SerializedName(value = "消化系统")
+                    public String digestSystem;
+                    @SerializedName(value = "种类")
+                    public String kind;
+//                    @SerializedName(value = "衰败期")
+//                    public String decline;
+                    @SerializedName(value = "身体")
+                    public String body;
+//                    @SerializedName(value = "鼎盛期")
+//                    public String heyday;
                 }
             }
         }

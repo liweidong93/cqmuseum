@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="23px">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="150px"
+        android:background="@drawable/chat_bg_left"
+        android:layout_marginLeft="47px"
+        android:layout_marginTop="58px"
+        android:paddingBottom="37px"
+        android:paddingRight="61px"
+        >
+
+        <ImageView
+            android:id="@+id/iv_pandaknowledge_pic"
+            android:layout_width="340px"
+            android:layout_height="200px"
+            android:scaleType="fitXY"
+            android:layout_marginTop="37px"
+            android:layout_marginLeft="61px"/>
+
+        <TextView
+            android:id="@+id/tv_pandaknowledge_nametext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:paddingTop="2px"
+            android:paddingBottom="2px"
+            android:text="种类："
+            android:layout_marginLeft="58px"
+            android:layout_toRightOf="@+id/iv_pandaknowledge_pic"
+            android:layout_alignTop="@+id/iv_pandaknowledge_pic"/>
+
+
+
+        <TextView
+            android:id="@+id/tv_pandaknowledge_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28px"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_marginRight="170px"
+            android:layout_toRightOf="@+id/tv_pandaknowledge_nametext"
+            android:layout_alignTop="@+id/tv_pandaknowledge_nametext"/>
+
+        <TextView
+            android:id="@+id/tv_pandaknowledge_attributes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:text="属性："
+            android:layout_marginTop="22px"
+            android:layout_below="@+id/tv_pandaknowledge_nametext"
+            android:layout_alignLeft="@+id/tv_pandaknowledge_nametext"/>
+
+
+        <TextView
+            android:id="@+id/tv_pandaknowledge_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:text="年代："
+            android:singleLine="true"
+            android:layout_marginTop="22px"
+            android:layout_below="@+id/tv_pandaknowledge_attributes"
+            android:layout_alignLeft="@+id/tv_pandaknowledge_attributes"/>
+
+        <TextView
+            android:id="@+id/tv_pandaknowledge_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:text="地址："
+            android:layout_marginTop="22px"
+            android:layout_below="@+id/tv_pandaknowledge_time"
+            android:layout_alignLeft="@+id/tv_pandaknowledge_time"/>
+
+        <TextView
+            android:id="@+id/tv_pandaknowledge_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:text="身体："
+            android:layout_marginTop="19px"
+            android:layout_below="@+id/iv_pandaknowledge_pic"
+            android:layout_alignLeft="@+id/iv_pandaknowledge_pic"/>
+
+        <TextView
+            android:id="@+id/tv_pandaknowledge_bodytext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:layout_toRightOf="@+id/tv_pandaknowledge_body"
+            android:layout_alignTop="@+id/tv_pandaknowledge_body"/>
+
+        <TextView
+            android:id="@+id/tv_pandaknowledge_figure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:text="伪拇指："
+            android:layout_marginTop="19px"
+            android:layout_below="@+id/tv_pandaknowledge_bodytext"
+            android:layout_alignLeft="@+id/tv_pandaknowledge_body"/>
+
+        <TextView
+            android:id="@+id/tv_pandaknowledge_figuretext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:layout_toRightOf="@+id/tv_pandaknowledge_figure"
+            android:layout_alignTop="@+id/tv_pandaknowledge_figure"/>
+
+        <TextView
+            android:id="@+id/tv_pandaknowledge_fossil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:text="咀嚼肌："
+            android:layout_marginTop="19px"
+            android:layout_below="@+id/tv_pandaknowledge_figuretext"
+            android:layout_alignLeft="@+id/tv_pandaknowledge_figure"/>
+
+        <TextView
+            android:id="@+id/tv_pandaknowledge_fossiltext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:layout_toRightOf="@+id/tv_pandaknowledge_fossil"
+            android:layout_alignTop="@+id/tv_pandaknowledge_fossil"/>
+
+        <TextView
+            android:id="@+id/tv_pandaknowledge_skull"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:text="头骨："
+            android:layout_marginTop="19px"
+            android:layout_below="@+id/tv_pandaknowledge_fossiltext"
+            android:layout_alignLeft="@+id/tv_pandaknowledge_fossil"/>
+
+        <TextView
+            android:id="@+id/tv_pandaknowledge_skulltext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:layout_toRightOf="@+id/tv_pandaknowledge_skull"
+            android:layout_alignTop="@+id/tv_pandaknowledge_skull"/>
+
+        <TextView
+            android:id="@+id/tv_pandaknowledge_digestsystem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:text="消化系统："
+            android:layout_marginTop="19px"
+            android:layout_below="@+id/tv_pandaknowledge_skulltext"
+            android:layout_alignLeft="@+id/tv_pandaknowledge_skull"/>
+
+        <TextView
+            android:id="@+id/tv_pandaknowledge_digestsystemtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:layout_toRightOf="@+id/tv_pandaknowledge_digestsystem"
+            android:layout_alignTop="@+id/tv_pandaknowledge_digestsystem"/>
+
+        <TextView
+            android:id="@+id/tv_pandaknowledge_introduce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:text="简介："
+            android:layout_marginTop="19px"
+            android:layout_below="@+id/tv_pandaknowledge_digestsystemtext"
+            android:layout_alignLeft="@+id/tv_pandaknowledge_digestsystem"/>
+
+        <TextView
+            android:id="@+id/tv_pandaknowledge_introducetext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24px"
+            android:textColor="@color/white"
+            android:layout_toRightOf="@+id/tv_pandaknowledge_introduce"
+            android:layout_alignTop="@+id/tv_pandaknowledge_introduce"/>
+
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="94px"
+        android:layout_height="126px"
+        android:src="@mipmap/icon_panda"
+        android:scaleType="fitXY"
+        />
+
+</RelativeLayout>

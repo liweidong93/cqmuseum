@@ -88,10 +88,10 @@ public class CollectionViewHolder extends BaseViewHolder<AnswerBean.AnswerItem>{
             }else{
                 mTextViewFeed.setText("食性：" + fieldValue.feed);
             }
-            if (TextUtils.isEmpty(fieldValue.body)){
+            if (TextUtils.isEmpty(fieldValue.bodylength)){
                 mTextViewBody.setText("体长：--");
             }else{
-                mTextViewBody.setText("体长：" + fieldValue.body);
+                mTextViewBody.setText("体长：" + fieldValue.bodylength);
             }
             mTextViewIntroduce.setText(fieldValue.introduce == null ? "--" : fieldValue.introduce);
             //显示更多
