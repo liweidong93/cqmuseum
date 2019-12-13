@@ -39,6 +39,7 @@ import com.cnki.cqmuseum.updateapk.UpdateApkService;
 import com.cnki.cqmuseum.utils.ImageUtils;
 import com.cnki.cqmuseum.utils.LogUtils;
 import com.cnki.cqmuseum.utils.Md5Utils;
+import com.cnki.cqmuseum.utils.NetUtils;
 import com.cnki.cqmuseum.utils.RandomUtils;
 import com.cnki.cqmuseum.utils.TextStyleUtils;
 import com.cnki.cqmuseum.view.PasswordDialog;
@@ -68,6 +69,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements IHomeVi
     private QuestionLoopThread mQueationLoopThread;
     //大熊猫图标
     private ImageView mImageViewPanda;
+    public static String localhostIp;
 
 
     @Override
@@ -158,6 +160,8 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements IHomeVi
                 }
             }
         },2000);
+        //获取机器人ip
+        localhostIp = NetUtils.getIPAddress(this);
     }
 
 

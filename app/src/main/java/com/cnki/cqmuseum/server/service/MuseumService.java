@@ -7,7 +7,10 @@ import com.cnki.cqmuseum.bean.SpeechServer;
 import java.util.ArrayList;
 
 import io.reactivex.Observable;
+import okhttp3.RequestBody;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
@@ -48,4 +51,11 @@ public interface MuseumService {
      */
     @GET("getCollectionListByIds")
     Observable<BaseResult<ArrayList<CollectionList.CollectionItem>>> getCollectionListByIds(@Query("ids") String ids);
+
+    //行为收集
+    @POST("submit")
+    Observable<Object> submit(@Body RequestBody requestBody);
+
+    @POST("submitqa")
+    Observable<Object> submitQa(@Body RequestBody requestBody);
 }

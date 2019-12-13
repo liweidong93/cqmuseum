@@ -425,8 +425,9 @@ public class RobotManager {
                         LogUtils.e("机器人", result);
                         //设置类型为闲聊通用
                         AnswerBean.AnswerItem answerItem = new AnswerBean.AnswerItem();
-                        answerItem.viewType = ChatViewTypeConstant.VIEWTYPE_DEFAULT;
+                        answerItem.viewType = ChatViewTypeConstant.VIEWTYPE_ROBOT;
                         answerItem.Question = question;
+                        answerItem.orignalQuestion = question;
                         answerItem.Answer = result;
                         //回调出去
                         callBack.onSuccess(answerItem);
@@ -437,8 +438,9 @@ public class RobotManager {
                 //异常
                 LogUtils.e("机器人", "获取答案失败:" + e.toString());
                 AnswerBean.AnswerItem answerItem = new AnswerBean.AnswerItem();
-                answerItem.viewType = ChatViewTypeConstant.VIEWTYPE_DEFAULT;
+                answerItem.viewType = ChatViewTypeConstant.VIEWTYPE_ROBOT;
                 answerItem.Question = question;
+                answerItem.orignalQuestion = question;
                 answerItem.Answer = "您好，该问题已提交问题库，博物馆老师稍后会为您解答。";
                 callBack.onFailed(answerItem);
             }

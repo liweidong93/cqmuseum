@@ -28,6 +28,7 @@ import com.cnki.cqmuseum.constant.QuestionListConstant;
 import com.cnki.cqmuseum.constant.RobotKeyConstant;
 import com.cnki.cqmuseum.manager.FloatButtonManager;
 import com.cnki.cqmuseum.manager.RobotManager;
+import com.cnki.cqmuseum.server.api.MuseumApi;
 import com.cnki.cqmuseum.utils.KeyboardUtils;
 import com.cnki.cqmuseum.utils.RandomUtils;
 import com.cnki.cqmuseum.view.CollectionDialog;
@@ -635,6 +636,13 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements IChatVi
         if (answerItem.viewType == ChatViewTypeConstant.VIEWTYPE_COLLECTION){
             new CollectionDialog(this, answerItem).show();
         }
+        //提交有无问题答案
+        if (answerItem.viewType == ChatViewTypeConstant.VIEWTYPE_ROBOT && !answerItem.orignalQuestion.contains("天气")){
+            MuseumApi.getInstance().submitQa(mPresenter, this, answerItem.orignalQuestion, "no");
+        }else{
+            MuseumApi.getInstance().submitQa(mPresenter, this, answerItem.orignalQuestion, "yes");
+        }
+        MuseumApi.getInstance().submit(mPresenter,this, answerItem.orignalQuestion);
     }
 
     /**

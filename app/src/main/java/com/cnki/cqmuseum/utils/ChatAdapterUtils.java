@@ -38,6 +38,7 @@ public class ChatAdapterUtils {
             case ChatViewTypeConstant.VIEWTYPE_QUESTION://问题的布局
                 return new QuestionViewHolder(LayoutInflater.from(context).inflate(R.layout.adapter_chat_questionitem, parent, false));
             case ChatViewTypeConstant.VIEWTYPE_DEFAULT://默认答案布局
+            case ChatViewTypeConstant.VIEWTYPE_ROBOT://机器人回答答案
                 return new DefaultViewHolder(LayoutInflater.from(context).inflate(R.layout.adapter_chat_defaultitem, parent, false));
             case ChatViewTypeConstant.VIEWTYPE_COLLECTION://精品文物
                 return new CollectionViewHolder(LayoutInflater.from(context).inflate(R.layout.adapter_chat_collectionitem, parent, false));
