@@ -61,7 +61,7 @@ public class CollectionPresenter extends BasePresenterImpl<ICollectionView> {
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
-                ToastUtils.toast(mContext,"网络不给力，请稍后重试");
+                mView.onFailed();
             }
         });
     }

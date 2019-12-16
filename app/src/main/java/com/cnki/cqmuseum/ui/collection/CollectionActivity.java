@@ -269,6 +269,7 @@ public class CollectionActivity extends BaseActivity<CollectionPresenter> implem
 
     @Override
     public void noEmpty() {
+        mCollectionAdapter.pauseMore();
         ToastUtils.toast(CollectionActivity.this,"没有查到相关结果！！！");
     }
 

@@ -7,10 +7,6 @@ package com.cnki.cqmuseum.constant;
 
 public class UrlConstant {
 
-    //知网baseurl公网
-//    public static final String URL_CNKI = "http://ai.cnki.net/dn.qa.api/";
-    //知网内网
-//    public static final String URL_CNKI = "http://192.168.100.75/dn.qa.api/";
     //熊猫展会内网
 //    public static final String URL_CNKI = "http://192.168.100.75/zrbwg.qa.api/";
     public static final String URL_CNKI = "http://ai.cnki.net/zrbwg.qa.api/";
@@ -26,4 +22,5 @@ public class UrlConstant {
 
     //提交问题域名
     public static final String URL_SUBMIT = "http://qa2.cnki.net/YuMNHCollect/admin/cache/";
+
 }
