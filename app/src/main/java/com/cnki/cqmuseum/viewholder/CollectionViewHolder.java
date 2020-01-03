@@ -13,6 +13,7 @@ import com.cnki.cqmuseum.bean.AnswerBean;
 import com.cnki.cqmuseum.constant.UrlConstant;
 import com.cnki.cqmuseum.ui.chat.ChatPresenter;
 import com.cnki.cqmuseum.utils.DisplayUtils;
+import com.cnki.cqmuseum.utils.GlideUtils;
 import com.cnki.cqmuseum.utils.HtmlUtils;
 import com.cnki.cqmuseum.utils.TextStyleUtils;
 import com.cnki.cqmuseum.view.CollectionDialog;
@@ -61,7 +62,7 @@ public class CollectionViewHolder extends BaseViewHolder<AnswerBean.AnswerItem>{
                 && datas.get(position).kNodeItems.get(0) != null && datas.get(position).kNodeItems.get(0).dataItems != null
                 && datas.get(position).kNodeItems.get(0).dataItems.size() != 0 && datas.get(position).kNodeItems.get(0).dataItems.get(0).fieldValue != null){
             AnswerBean.AnswerItem.KNodeItem.DataItem.FieldValue fieldValue = datas.get(position).kNodeItems.get(0).dataItems.get(0).fieldValue;
-            Glide.with(context).load(UrlConstant.URL_CNKI_PIC + fieldValue.pic).thumbnail(0.1f).into(mImageViewPic);
+            GlideUtils.loadPic(context, UrlConstant.URL_CNKI_PIC + fieldValue.pic, mImageViewPic);
             mTextViewName.setText(TextStyleUtils.replaceRedTag(fieldValue.name));
             if (TextUtils.isEmpty(fieldValue.type)){
                 mTextViewType.setText("类别：--");

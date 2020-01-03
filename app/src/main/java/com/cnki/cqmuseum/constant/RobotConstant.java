@@ -13,6 +13,7 @@ public class RobotConstant {
     //测试机器人参数
     public static final String ROBOT_APPID = "ad03dcf85c042003682f7cc1a68813e1";
     public static final String ROBOT_NUM = "28ede03d1753";//机器人序列号
+//    public static final String ROBOT_NUM = "28ede01456d9";//重庆自然博物馆机器人序列号
 
     //机器人显示隐藏系统按钮广播action
     public static String ACTION_HIDEBAR = "com.ubt.cruzr.hidebar";

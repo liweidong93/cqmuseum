@@ -219,7 +219,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements IChatVi
 
             @Override
             public void onFinish() {
-                //倒计时结束，退出当前界面
+                //倒计时结束，退出当前界面★
                 RobotManager.stopSpeech();
                 ChatActivity.this.finish();
             }

@@ -15,6 +15,7 @@ import com.cnki.cqmuseum.R;
 import com.cnki.cqmuseum.bean.AnswerBean;
 import com.cnki.cqmuseum.constant.UrlConstant;
 import com.cnki.cqmuseum.manager.RobotManager;
+import com.cnki.cqmuseum.utils.GlideUtils;
 import com.cnki.cqmuseum.utils.TextStyleUtils;
 import com.cnki.cqmuseum.view.CollectionDialog;
 
@@ -92,7 +93,7 @@ public class CollectionVPAdapter extends PagerAdapter {
      */
     private void initData(int position){
         AnswerBean.AnswerItem.KNodeItem.DataItem.FieldValue fieldValue = mKNodeItems.get(position).dataItems.get(0).fieldValue;
-        Glide.with(mContext).load(UrlConstant.URL_CNKI_PIC + fieldValue.pic).thumbnail(0.1f).into(mImageViewPic);
+        GlideUtils.loadPic(mContext, UrlConstant.URL_CNKI_PIC + fieldValue.pic, mImageViewPic);
         mTextViewName.setText(TextStyleUtils.replaceRedTag(fieldValue.name));
         if (TextUtils.isEmpty(fieldValue.type)){
             mTextViewType.setText("类别：--");

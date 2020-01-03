@@ -16,6 +16,7 @@ import com.cnki.cqmuseum.constant.RobotKeyConstant;
 import com.cnki.cqmuseum.interf.OnASRCallBack;
 import com.cnki.cqmuseum.interf.OnRobotAnswerCallBack;
 import com.cnki.cqmuseum.interf.OnSpeakCallBack;
+import com.cnki.cqmuseum.interf.SpeakEndCallBack;
 import com.cnki.cqmuseum.ui.chat.ChatActivity;
 import com.cnki.cqmuseum.ui.collection.CollectionActivity;
 import com.cnki.cqmuseum.ui.guide.GuideActivity;
@@ -38,6 +39,7 @@ import com.ubtrobot.async.FailCallback;
 import com.ubtrobot.speech.AbstractNLUParamGenerator;
 import com.ubtrobot.speech.LegacyUnderstandResult;
 import com.ubtrobot.speech.LegacyUnderstander;
+import com.ubtrobot.speech.SpeechManager;
 import com.ubtrobot.speech.UnderstandConstant;
 import com.ubtrobot.speech.UnderstandException;
 import com.ubtrobot.speech.UnderstandOption;
@@ -130,6 +132,7 @@ public class RobotManager {
             if (robotResultBean != null && robotResultBean.onlu != null && !TextUtils.isEmpty(robotResultBean.onlu.request)){
                 //获取到机器人结果
                 String result = robotResultBean.onlu.request;
+                LogUtils.e("robot","识别到的结果：" + result);
                 //将机器人结果转为拼音
 //                String pinResult = TextStyleUtils.toPinyin(result);
                 //首先判断是否正在说话，如果是说话中则判断是否说的为停止说话
@@ -147,21 +150,29 @@ public class RobotManager {
                     //再见
                     if ((result.contains("再见") || result.contains("拜拜"))){
                         RobotActionUtils.playSettingAction(RobotKeyConstant.ROBOTKEY_BYE);
+                        RobotManager.speechVoice("和您聊天很愉快，我们下次再见");
                         return;
                     }
                     //拥抱
                     if (result.contains("抱")){
                         RobotActionUtils.playSettingAction(RobotKeyConstant.ROBOTKEY_HUG);
+                        RobotManager.speechVoice("抱抱");
                         return;
                     }
                     //握手
                     if (result.contains("握")){
                         RobotActionUtils.playSettingAction(RobotKeyConstant.ROBOTKEY_SHANKHAND);
+                        RobotManager.speechVoice("你好啊");
                         return;
                     }
                     //跳舞
                     if (result.contains("跳") && result.contains("舞")){
-                        RobotActionUtils.startDance(context);
+                        speechDothing("我将要开始跳舞了，请跟我保持一些距离", new SpeakEndCallBack() {
+                            @Override
+                            public void doSomething() {
+                                RobotActionUtils.startDance();
+                            }
+                        });
                         return;
                     }
                     //停止跳舞
@@ -259,8 +270,8 @@ public class RobotManager {
     }
 
     /**
+     * 所有指令都分发给程序
      * 设置机器人为截获语音信息，程序进行处理
-     * 部分指令由机器人接管
      */
     public static void setOnlineSpeechMode(){
         SpeechRobotApi.get().speechPermissionDispatch(RobotConstant.APPID, SpeechConstant.SPEECH_DISPATCH_PERMISSION_ALL);
@@ -331,6 +342,30 @@ public class RobotManager {
     public static void speechVoice(String speechStr){
         isAbort = false;
         SpeechRobotApi.get().speechStartTTS(speechStr, speechTtsListener);
+    }
+
+    /**
+     * 播报完成进行某些动作回调
+     * @param str
+     * @param callBack
+     */
+    public static void speechDothing(String str, final SpeakEndCallBack callBack){
+        isAbort = false;
+        SpeechRobotApi.get().speechStartTTS(str, new SpeechTtsListener(){
+            @Override
+            public void onEnd() {
+                super.onEnd();
+                callBack.doSomething();
+            }
+
+
+            @Override
+            public void onAbort() {
+                super.onAbort();
+                callBack.doSomething();
+            }
+
+        });
     }
 
     /**

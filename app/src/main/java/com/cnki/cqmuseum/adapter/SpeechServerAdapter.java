@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.cnki.cqmuseum.R;
 import com.cnki.cqmuseum.bean.SpeechServer;
 import com.cnki.cqmuseum.constant.UrlConstant;
+import com.cnki.cqmuseum.utils.GlideUtils;
 
 import java.util.ArrayList;
 
@@ -51,11 +52,11 @@ public class SpeechServerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if (position % 2 == 0){
                 mHolder.mImageViewLeft.setVisibility(View.VISIBLE);
                 mHolder.mImageViewRight.setVisibility(View.GONE);
-                Glide.with(mContext).load(UrlConstant.URL_CNKI_PIC + speechServer.pic).thumbnail(0.1f).into(mHolder.mImageViewLeft);
+                GlideUtils.loadPic(mContext, UrlConstant.URL_CNKI_PIC + speechServer.pic, mHolder.mImageViewLeft);
             }else{
                 mHolder.mImageViewLeft.setVisibility(View.GONE);
                 mHolder.mImageViewRight.setVisibility(View.VISIBLE);
-                Glide.with(mContext).load(UrlConstant.URL_CNKI_PIC + speechServer.pic).thumbnail(0.1f).into(mHolder.mImageViewRight);
+                GlideUtils.loadPic(mContext, UrlConstant.URL_CNKI_PIC + speechServer.pic, mHolder.mImageViewRight);
             }
             if (TextUtils.isEmpty(speechServer.text)){
                 mHolder.mTextViewText.setVisibility(View.GONE);

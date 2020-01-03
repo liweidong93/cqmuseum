@@ -95,59 +95,65 @@ public class RobotActionUtils {
         moveToward(0.5f,0,0);
     }
 
-
     /**
-     * 开始跳舞指令
+     * 初始化舞蹈服务
      * @param context
      */
-    public static void startDance(Context context) {
+    public static void initDanceServer(Context context){
         // 初始化方法
         DanceControlApi.getInstance().initialize(context, new DanceConnectionListener() {
             @Override
             public void onConnected() {
                 //与舞蹈服务成功建立连接
-                LogUtils.e("机器人247", "与舞蹈服务成功建立连接");
-                ArrayList<String> dances = RandomUtils.getRandomArray(1, RobotKeyConstant.dances);
-                if (dances != null && dances.size() != 0){
-                    DanceControlApi.getInstance().dance(dances.get(0), new RemoteDanceListener() {
-                        @Override
-                        public void onResult(int status) {
-                            switch (status){
-                                case DanceConstant.STATE_DANCE_START:
-                                    //舞蹈启动
-                                    break;
-                                case DanceConstant.STATE_DANCE_COMPLETE:
-                                    //舞蹈正常结束
-                                    break;
-                                case DanceConstant.STATE_DANCE_CANCEL:
-                                    //舞蹈被取消
-                                    break;
-                                case DanceConstant.STATE_DANCE_FORBIDDEN:
-                                    //机器人手臂被锁定，禁止跳舞
-                                    RobotManager.speechVoice("机器人手臂被锁定，禁止跳舞");
-                                    break;
-                                case DanceConstant.STATE_DANCE_FAIL:
-                                    //舞蹈失败
-                                    break;
-                            }
-                        }
-                    });
-                }
+                LogUtils.e("lwd", "与舞蹈服务成功建立连接");
+
             }
 
             @Override
             public void onDisconnected() {
                 //与舞蹈服务连接断开
-                LogUtils.e("机器人253", "与舞蹈服务连接断开");
+                LogUtils.e("lwd", "与舞蹈服务连接断开");
                 stopDance();
             }
 
             @Override
             public void onReconnected() {
                 //与舞蹈舞蹈服务重新连接
-                LogUtils.e( "机器人259", "与舞蹈舞蹈服务重新连接");
+                LogUtils.e( "lwd", "与舞蹈舞蹈服务重新连接");
             }
         });
+    }
+
+    /**
+     * 开始跳舞指令
+     */
+    public static void startDance() {
+        ArrayList<String> dances = RandomUtils.getRandomArray(1, RobotKeyConstant.dances);
+        if (dances != null && dances.size() != 0){
+            DanceControlApi.getInstance().dance(dances.get(0), new RemoteDanceListener() {
+                @Override
+                public void onResult(int status) {
+                    switch (status){
+                        case DanceConstant.STATE_DANCE_START:
+                            //舞蹈启动
+                            break;
+                        case DanceConstant.STATE_DANCE_COMPLETE:
+                            //舞蹈正常结束
+                            break;
+                        case DanceConstant.STATE_DANCE_CANCEL:
+                            //舞蹈被取消
+                            break;
+                        case DanceConstant.STATE_DANCE_FORBIDDEN:
+                            //机器人手臂被锁定，禁止跳舞
+                            RobotManager.speechVoice("机器人手臂被锁定，禁止跳舞");
+                            break;
+                        case DanceConstant.STATE_DANCE_FAIL:
+                            //舞蹈失败
+                            break;
+                    }
+                }
+            });
+        }
     }
 
     /**

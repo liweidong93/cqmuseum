@@ -19,6 +19,7 @@ import com.cnki.cqmuseum.constant.NavigationStateConstant;
 import com.cnki.cqmuseum.interf.OnGuideListener;
 import com.cnki.cqmuseum.manager.FloatButtonManager;
 import com.cnki.cqmuseum.manager.RobotManager;
+import com.cnki.cqmuseum.utils.GlideUtils;
 import com.cnki.cqmuseum.view.SelectDialog;
 import com.ubtechinc.cruzr.sdk.speech.SpeechRobotApi;
 
@@ -216,23 +217,23 @@ public class GuideActivity extends BaseActivity<GuidePresenter> implements IGuid
      */
     private void createGuideRoute(){
         guideRoutes = new ArrayList<>();
-        Guide jiedai = new Guide("接待点", "http://192.168.103.24:8080/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", "这里是接待点", (RelativeLayout) findViewById(R.id.include_guide_point1));
+        Guide jiedai = new Guide("接待点", "http://qa2.cnki.net/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", "这里是接待点", (RelativeLayout) findViewById(R.id.include_guide_point1));
         guideRoutes.add(jiedai);
-        Guide guide1 = new Guide("恐龙馆", "http://192.168.103.24:8080/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", GuideWords.DINOSAUR,(RelativeLayout) findViewById(R.id.include_guide_point2));
+        Guide guide1 = new Guide("恐龙馆", "http://qa2.cnki.net/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", GuideWords.DINOSAUR,(RelativeLayout) findViewById(R.id.include_guide_point2));
         guideRoutes.add(guide1);
-        Guide guide2 = new Guide("岩石馆", "http://192.168.103.24:8080/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", GuideWords.ROCK,(RelativeLayout) findViewById(R.id.include_guide_point3));
+        Guide guide2 = new Guide("岩石馆", "http://qa2.cnki.net/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", GuideWords.ROCK,(RelativeLayout) findViewById(R.id.include_guide_point3));
         guideRoutes.add(guide2);
-        Guide guide3 = new Guide("化石馆", "http://192.168.103.24:8080/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", GuideWords.FOSSIC,(RelativeLayout) findViewById(R.id.include_guide_point4));
+        Guide guide3 = new Guide("化石馆", "http://qa2.cnki.net/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", GuideWords.FOSSIC,(RelativeLayout) findViewById(R.id.include_guide_point4));
         guideRoutes.add(guide3);
-        Guide guide4 = new Guide("文化馆", "http://192.168.103.24:8080/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", "这里是文化馆",(RelativeLayout) findViewById(R.id.include_guide_point5));
+        Guide guide4 = new Guide("文化馆", "http://qa2.cnki.net/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", "这里是文化馆",(RelativeLayout) findViewById(R.id.include_guide_point5));
         guideRoutes.add(guide4);
-        Guide guide5 = new Guide("美术馆", "http://192.168.103.24:8080/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", "这里是美术馆",(RelativeLayout) findViewById(R.id.include_guide_point6));
+        Guide guide5 = new Guide("美术馆", "http://qa2.cnki.net/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", "这里是美术馆",(RelativeLayout) findViewById(R.id.include_guide_point6));
         guideRoutes.add(guide5);
-        Guide guide6 = new Guide("动物馆", "http://192.168.103.24:8080/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", "这里是动物馆",(RelativeLayout) findViewById(R.id.include_guide_point7));
+        Guide guide6 = new Guide("动物馆", "http://qa2.cnki.net/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", "这里是动物馆",(RelativeLayout) findViewById(R.id.include_guide_point7));
         guideRoutes.add(guide6);
-        Guide guide7 = new Guide("植物馆", "http://192.168.103.24:8080/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", "这里是植物馆",(RelativeLayout) findViewById(R.id.include_guide_point8));
+        Guide guide7 = new Guide("植物馆", "http://qa2.cnki.net/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", "这里是植物馆",(RelativeLayout) findViewById(R.id.include_guide_point8));
         guideRoutes.add(guide7);
-        Guide guide8 = new Guide("水生动物馆", "http://192.168.103.24:8080/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", "这里是水生动物馆",(RelativeLayout) findViewById(R.id.include_guide_point9));
+        Guide guide8 = new Guide("水生动物馆", "http://qa2.cnki.net/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", "这里是水生动物馆",(RelativeLayout) findViewById(R.id.include_guide_point9));
         guideRoutes.add(guide8);
     }
 
@@ -286,7 +287,7 @@ public class GuideActivity extends BaseActivity<GuidePresenter> implements IGuid
                 //到达后通知，改变成图文形式
                 mImageViewGuideIcon.setVisibility(View.GONE);
                 mScrollViewIntroduce.setVisibility(View.VISIBLE);
-                Glide.with(GuideActivity.this).load(guide.getPic()).thumbnail(0.1f).into(mImageViewPic);
+                GlideUtils.loadPic(GuideActivity.this, guide.getPic(), mImageViewPic);
                 mTextViewName.setText(guide.getName());
                 mTextViewIntroduce.setText(guide.getIntroduce());
             }

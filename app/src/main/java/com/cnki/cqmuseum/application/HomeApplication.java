@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
+import com.cnki.cqmuseum.manager.RobotActionUtils;
 import com.cnki.cqmuseum.manager.RobotManager;
 
 
@@ -41,6 +42,8 @@ public class HomeApplication extends MultiDexApplication {
         crashHandler.init(getApplicationContext());
         //初始化机器人api
         RobotManager.initRobot(getApplicationContext());
+        //初始化舞蹈服务
+        RobotActionUtils.initDanceServer(getApplicationContext());
     }
 
     @Override

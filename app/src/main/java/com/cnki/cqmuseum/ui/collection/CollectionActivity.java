@@ -32,6 +32,8 @@ import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * 精品馆藏界面
@@ -63,12 +65,13 @@ public class CollectionActivity extends BaseActivity<CollectionPresenter> implem
             switch (msg.what){
                 case MSG_SETVALUE:
                     isPressDown = false;
-                    LogUtils.e("识别到的文物结果为：" + tempResult + "\nispressdown:" + isPressDown);
+                    LogUtils.e("robot","识别到的文物结果为：" + tempResult + "\nispressdown:" + isPressDown);
                     mEditTextInput.setText(tempResult);
                     break;
             }
         }
     };
+    private ExecutorService cachedThreadPool;
 
     @Override
     public CollectionPresenter initPresenter() {
@@ -105,7 +108,7 @@ public class CollectionActivity extends BaseActivity<CollectionPresenter> implem
 
             @Override
             public void afterTextChanged(Editable editable) {
-                LogUtils.e("lwd","输入的文字:" + editable.toString());
+                LogUtils.e("robot","输入的文字:" + editable.toString());
                 if (mImageViewDelete.getVisibility() == View.GONE && !TextUtils.isEmpty(editable.toString())){
                     mImageViewDelete.setVisibility(View.VISIBLE);
                 }else if (mImageViewDelete.getVisibility() == View.VISIBLE && TextUtils.isEmpty(editable.toString())){
@@ -119,6 +122,10 @@ public class CollectionActivity extends BaseActivity<CollectionPresenter> implem
                     mCollectionAdapter.clear();
 //                    mCollectionAdapter.notifyDataSetChanged();
                     mPresenter.askQuestion(editable.toString().trim());
+                }else if (TextUtils.isEmpty(editable.toString().trim()) && TextUtils.isEmpty(mSelectType)){
+                    //获取全部
+                    curPage = 0;
+                    mPresenter.getCollectionListByType("", curPage);
                 }
             }
         });
@@ -126,7 +133,7 @@ public class CollectionActivity extends BaseActivity<CollectionPresenter> implem
         mImageViewVoice = findViewById(R.id.iv_collection_voice);
         mImageViewVoice.setOnTouchListener(new View.OnTouchListener() {
 
-            private boolean isStart;
+            private volatile boolean isStart;
 
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -143,7 +150,7 @@ public class CollectionActivity extends BaseActivity<CollectionPresenter> implem
                         }
                         mVolumeDialogUtils.show();
                         //开启线程进行音量控制
-                        new Thread(){
+                        cachedThreadPool.submit(new Runnable() {
                             @Override
                             public void run() {
                                 volumn = 0;
@@ -162,10 +169,10 @@ public class CollectionActivity extends BaseActivity<CollectionPresenter> implem
                                     });
                                 }
                             }
-                        }.start();
+                        });
                         break;
                     case MotionEvent.ACTION_UP:
-                        mHandler.sendEmptyMessageDelayed(MSG_SETVALUE,1000);
+                        mHandler.sendEmptyMessageDelayed(MSG_SETVALUE,2000);
                         isStart = false;
                         //抬起事件
                         mVolumeDialogUtils.dismiss();
@@ -189,6 +196,7 @@ public class CollectionActivity extends BaseActivity<CollectionPresenter> implem
 
     @Override
     public void initData() {
+        cachedThreadPool = Executors.newCachedThreadPool();
         FloatButtonManager.getInstance().show();
         isPressDown = false;
         //设置文物列表适配器
@@ -256,7 +264,7 @@ public class CollectionActivity extends BaseActivity<CollectionPresenter> implem
         mCollectionAdapter.addAll(collectionItems);
         if (!TextUtils.isEmpty(mEditTextInput.getText().toString())){
             mCollectionAdapter.pauseMore();
-            mCollectionAdapter.resumeMore();
+//            mCollectionAdapter.resumeMore();
         }
     }
 

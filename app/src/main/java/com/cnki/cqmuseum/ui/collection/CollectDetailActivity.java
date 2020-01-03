@@ -18,6 +18,7 @@ import com.cnki.cqmuseum.bean.CollectionList;
 import com.cnki.cqmuseum.constant.IntentActionConstant;
 import com.cnki.cqmuseum.constant.UrlConstant;
 import com.cnki.cqmuseum.manager.RobotManager;
+import com.cnki.cqmuseum.utils.GlideUtils;
 import com.cnki.cqmuseum.utils.Rotate3dAnimation;
 import com.cnki.cqmuseum.view.MixtureTextView;
 
@@ -129,7 +130,7 @@ public class CollectDetailActivity extends BaseActivity<CollectionDetailPresente
         //初始化数据
         if (collectionItem != null){
             mTextViewName.setText(collectionItem.name);
-            Glide.with(mContext).load(UrlConstant.URL_CNKI_PIC + collectionItem.image).thumbnail(0.1f).into(mImageViewPic);
+            GlideUtils.loadPic(mContext, UrlConstant.URL_CNKI_PIC + collectionItem.image, mImageViewPic);
             mTextViewIntroduce.setText(collectionItem.introduce);
             RobotManager.speechVoice(collectionItem.introduce);
             if (!TextUtils.isEmpty(collectionItem.place)){

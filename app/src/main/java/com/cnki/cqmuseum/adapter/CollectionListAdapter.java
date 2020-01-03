@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.cnki.cqmuseum.R;
 import com.cnki.cqmuseum.bean.CollectionList;
 import com.cnki.cqmuseum.constant.UrlConstant;
+import com.cnki.cqmuseum.utils.GlideUtils;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 
@@ -56,7 +57,7 @@ public class CollectionListAdapter extends RecyclerArrayAdapter<CollectionList.C
             super.setData(data);
             mTextViewName.setText(data.name);
             mTextViewIntroduce.setText(data.introduce);
-            Glide.with(mContext).load(UrlConstant.URL_CNKI_PIC + data.image).thumbnail(0.1f).into(mImageViewPic);
+            GlideUtils.loadPic(mContext, UrlConstant.URL_CNKI_PIC + data.image, mImageViewPic);
         }
     }
 }

@@ -53,7 +53,7 @@ public class SpeechServerActivity extends BaseActivity<SpeechServerPresenter> im
 
     @Override
     public void initData() {
-        FloatButtonManager.getInstance().show();
+//        FloatButtonManager.getInstance().show();
         speechServers = new ArrayList<>();
         mAdapter = new SpeechServerAdapter(this, speechServers);
         mRecyclerViewData.setLayoutManager(new LinearLayoutManager(this));
@@ -99,7 +99,7 @@ public class SpeechServerActivity extends BaseActivity<SpeechServerPresenter> im
     @Override
     public void finish() {
         super.finish();
-        FloatButtonManager.getInstance().hide();
+//        FloatButtonManager.getInstance().hide();
         if (RobotManager.isSpeaking()){
             RobotManager.stopSpeech();
         }
