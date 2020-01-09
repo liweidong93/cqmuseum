@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="30px"
                 android:textColor="@color/color_72e437"
-                android:text="您可以这样问我："/>
+                android:text="您还可以问我这些："/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_chatpanda_suggestionlist"

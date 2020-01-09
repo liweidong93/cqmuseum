@@ -104,7 +104,7 @@ public class CollectionPresenter extends BasePresenterImpl<ICollectionView> {
         addDisposable(CnkiApi.getInstance().getCnkiAnswer(question), new BaseCnkiObserver() {
             @Override
             public void onSuccess(ArrayList<AnswerBean> answerBeans) {
-                AnswerBean.AnswerItem answerItem = chatModle.getViewType(answerBeans);
+                AnswerBean.AnswerItem answerItem = chatModle.getViewType(answerBeans, true);
                 //判断是否是精品文物,如果为精品文物的话，通过id来进行查找精品文物列表
                 if (answerItem.viewType == ChatViewTypeConstant.VIEWTYPE_COLLECTION){
                     if (answerItem != null && answerItem.kNodeItems != null && answerItem.kNodeItems.size() != 0){

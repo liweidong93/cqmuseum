@@ -42,7 +42,7 @@ public class ChatPresenter extends BasePresenterImpl<IChatView> {
             private volatile AnswerBean.AnswerItem mRobotAnswerItem;
             @Override
             public void onSuccess(ArrayList<AnswerBean> answerBeans) {
-                AnswerBean.AnswerItem answerItem = mModle.getViewType(answerBeans);
+                AnswerBean.AnswerItem answerItem = mModle.getViewType(answerBeans, false);
                 answerItem.orignalQuestion = question;
                 LogUtils.e("答案类型:" + answerItem.viewType);
                 mView.notifyChatData(question, answerItem);
