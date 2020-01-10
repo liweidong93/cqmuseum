@@ -173,7 +173,7 @@ public class GuidePresenter extends BasePresenterImpl<IGuideView> {
             @Override
             public void onFailed() {
                 //导航失败
-                RobotManager.speak("导航好像出现了点问题，请联系管理员设置地图")
+                RobotManager.speak("导航异常，请先对我进行定位")
                     .done(new DoneCallback<Void>() {
                         @Override
                         public void onDone(Void aVoid) {
@@ -266,7 +266,7 @@ public class GuidePresenter extends BasePresenterImpl<IGuideView> {
 
                                 @Override
                                 public void onFailed() {
-                                    RobotManager.speak("导航异常，请重新尝试")
+                                    RobotManager.speak("导航异常，请先对我进行定位")
                                             .done(new DoneCallback<Void>() {
                                                 @Override
                                                 public void onDone(Void aVoid) {

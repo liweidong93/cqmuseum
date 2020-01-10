@@ -11,6 +11,7 @@ import com.cnki.cqmuseum.constant.EvenBusConstant;
 import com.cnki.cqmuseum.constant.IntentActionConstant;
 import com.cnki.cqmuseum.constant.RobotConstant;
 import com.cnki.cqmuseum.constant.RobotDomainConstant;
+import com.cnki.cqmuseum.interf.OnLocationCallBack;
 import com.cnki.cqmuseum.interf.OnMarkerCallBack;
 import com.cnki.cqmuseum.interf.OnNaviCallBack;
 import com.cnki.cqmuseum.ui.chat.ChatActivity;
@@ -18,6 +19,7 @@ import com.cnki.cqmuseum.ui.collection.CollectionActivity;
 import com.cnki.cqmuseum.ui.guide.GuideActivity;
 import com.cnki.cqmuseum.ui.navigation.NavigationActivity;
 import com.cnki.cqmuseum.utils.LogUtils;
+import com.cnki.cqmuseum.utils.TextStyleUtils;
 import com.ubtrobot.Robot;
 import com.ubtrobot.async.CancelledCallback;
 import com.ubtrobot.async.DoneCallback;
@@ -56,6 +58,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 
 import java.io.File;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -159,6 +162,7 @@ public class RobotManager {
             public void onProgress(RecognitionProgress recognitionProgress) {
                 //将语音识别结果进行处理
                 if (!TextUtils.isEmpty(recognitionProgress.getTextResult())){
+                    LogUtils.e("robot","机器人识别结果:" + recognitionProgress.getTextResult());
                     topActivity = ActivityViewManager.getInstance().getTopActivity(context);
                     if (isSpeaking()){
                         if ((isXZH(recognitionProgress.getTextResult()) && recognitionProgress.getTextResult().contains("别说")) || (isXZH(recognitionProgress.getTextResult()) && recognitionProgress.getTextResult().contains("闭嘴"))
@@ -205,12 +209,27 @@ public class RobotManager {
                         evenBusBean.setObject(recognitionProgress.getTextResult());
                         EventBus.getDefault().post(evenBusBean);
                         return;
-                    }else if ((recognitionProgress.getTextResult().startsWith("带我去") || recognitionProgress.getTextResult().startsWith("小智带我去")))
+                    }else if (recognitionProgress.getTextResult().startsWith("带我去") || recognitionProgress.getTextResult().startsWith("小智带我去")
+                            || recognitionProgress.getTextResult().startsWith("小志带我去") || recognitionProgress.getTextResult().startsWith("乔治带我去")
+                            || recognitionProgress.getTextResult().startsWith("小子带我去")){
                         if (isListen){
-                            Intent intent = new Intent(context, NavigationActivity.class);
-//                            intent.putExtra(IntentActionConstant.NAVI_LOCATION, )
+                            getMarkerName(recognitionProgress.getTextResult(), new OnLocationCallBack() {
+                                @Override
+                                public void onSuccess(String markerName) {
+                                    //跳转到导航页面
+                                    Intent intent = new Intent(context, NavigationActivity.class);
+                                    intent.putExtra(IntentActionConstant.NAVI_LOCATION, markerName);
+                                    context.startActivity(intent);
+                                }
+
+                                @Override
+                                public void onFailed() {
+
+                                }
+                            });
                         }
-                    LogUtils.e("robot","机器人识别结果:" + recognitionProgress.getTextResult());
+                        return;
+                    }
                     understantSpeak(context, recognitionProgress.getTextResult());
                 }
             }
@@ -437,6 +456,35 @@ public class RobotManager {
                         markerCallBack.failed();
                     }
                 });
+            }
+        });
+    }
+
+    /**
+     * 通过一句话获取marker点名称
+     * @param pointName
+     * @param callBack
+     */
+    public static void getMarkerName(final String pointName, final OnLocationCallBack callBack) {
+        navigationManager.getCurrentNavMap().done(new DoneCallback<NavMap>() {
+            @Override
+            public void onDone(NavMap navMap) {
+                List<Marker> markerList = navMap.getMarkerList();
+                for (int i = 0; i < markerList.size(); i++) {
+                    // if (pointName.contains(allMapPointModelByMapName.get(i).getPointName())) { // 原来的方法，用文字来判断
+                    if (TextStyleUtils.toPinyin(pointName).contains(TextStyleUtils.toPinyin(markerList.get(i).getTitle()))) {
+                        callBack.onSuccess(markerList.get(i).getTitle());
+                        return;
+                    }
+                }
+                speak("抱歉，我在地图上没有找到您要去的位置点");
+                callBack.onFailed();
+            }
+        }).fail(new FailCallback<NavMapException>() {
+            @Override
+            public void onFail(NavMapException e) {
+                speak("您还没有对我设置地图，请先对我设置地图");
+                callBack.onFailed();
             }
         });
     }

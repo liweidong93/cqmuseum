@@ -82,7 +82,7 @@ public class NavigationActivity extends BaseActivity<NavigationPresenter> implem
                     @Override
                     public void onFailed() {
                         //导航失败，退出界面
-                        RobotManager.speak("导航异常，请您重新尝试").done(new DoneCallback<Void>() {
+                        RobotManager.speak("导航异常，请先对我进行定位").done(new DoneCallback<Void>() {
                             @Override
                             public void onDone(Void aVoid) {
                                 NavigationActivity.this.finish();
