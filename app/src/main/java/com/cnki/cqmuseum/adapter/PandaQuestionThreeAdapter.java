@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cnki.cqmuseum.R;
+import com.cnki.cqmuseum.manager.RobotManager;
 import com.cnki.cqmuseum.ui.chat.ChatPresenter;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class PandaQuestionThreeAdapter extends RecyclerView.Adapter<RecyclerView
         mHolder.mTextViewName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPresenter.sendQuestion(threeNames.get(i));
+                RobotManager.understantSpeak(mContext,threeNames.get(i));
             }
         });
     }

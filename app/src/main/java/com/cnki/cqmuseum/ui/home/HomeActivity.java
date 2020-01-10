@@ -171,8 +171,6 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements IHomeVi
         RobotManager.isListen = true;
         //隐藏系统菜单
         hideRobotBtn();
-        //设置机器人正常接收语音模式
-        RobotManager.setOnlineSpeechMode();
         isNeedStop = false;
         //每次进入，获取随机常见问题
         mQuestions = RandomUtils.getRandomArray(5, QuestionListConstant.pandaQuestions);

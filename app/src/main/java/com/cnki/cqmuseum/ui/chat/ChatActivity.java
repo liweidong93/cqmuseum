@@ -129,7 +129,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements IChatVi
                     Toast.makeText(ChatActivity.this, "请输入问题", Toast.LENGTH_LONG).show();
                     return;
                 }
-                mPresenter.sendQuestion(question);
+                RobotManager.understantSpeak(ChatActivity.this, question);
                 KeyboardUtils.hideKeyboard(mEditTextInput);
                 mEditTextInput.setText("");
             }
@@ -140,7 +140,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements IChatVi
             @Override
             public void onClick(View v) {
                 //停止语音播报
-                RobotManager.stopSpeech();
+                RobotManager.stopSpeak();
                 ChatActivity.this.finish();
             }
         });
@@ -150,7 +150,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements IChatVi
             @Override
             public void onClick(View v) {
                 //停止语音播报
-                RobotManager.stopSpeech();
+                RobotManager.stopSpeak();
                 mAnswerItems.clear();
                 addDefaultWelcome();
                 mChatAdapter.notifyDataSetChanged();
@@ -220,7 +220,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements IChatVi
             @Override
             public void onFinish() {
                 //倒计时结束，退出当前界面★
-                RobotManager.stopSpeech();
+                RobotManager.stopSpeak();
                 ChatActivity.this.finish();
             }
         };
@@ -228,7 +228,8 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements IChatVi
         //获取是否是语音问答跳转过来的
         String question = getIntent().getStringExtra(IntentActionConstant.ACTION_QUESTION);
         if (!TextUtils.isEmpty(question)){
-            mPresenter.sendQuestion(question);
+            String robotMsg = getIntent().getStringExtra(IntentActionConstant.ROBOT_MSG);
+            mPresenter.sendQuestion(question, robotMsg);
         }
     }
 
@@ -577,7 +578,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements IChatVi
             case R.id.tv_main_title6:
             case R.id.tv_main_title7:
                 String question = ((TextView) view).getText().toString();
-                mPresenter.sendQuestion(question);
+                RobotManager.understantSpeak(ChatActivity.this, question);
                 break;
         }
     }
@@ -671,7 +672,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements IChatVi
                     if (!TextUtils.isEmpty(question)){
                         startTimer();
                         //发送问题
-                        mPresenter.sendQuestion(question);
+                        mPresenter.sendQuestion(question, baseEvenBusBean.getRobotMsg());
                     }
                     break;
             }

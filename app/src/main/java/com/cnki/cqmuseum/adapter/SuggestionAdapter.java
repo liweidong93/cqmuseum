@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cnki.cqmuseum.R;
+import com.cnki.cqmuseum.manager.RobotManager;
 import com.cnki.cqmuseum.ui.chat.ChatPresenter;
 
 /**
@@ -41,7 +42,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         mHolder.mTextViewQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPresenter.sendQuestion(mSuggestions[i]);
+                RobotManager.understantSpeak(mContext, mSuggestions[i]);
             }
         });
     }

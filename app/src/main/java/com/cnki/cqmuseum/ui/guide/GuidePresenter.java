@@ -2,24 +2,23 @@ package com.cnki.cqmuseum.ui.guide;
 
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.cnki.cqmuseum.base.BasePresenterImpl;
 import com.cnki.cqmuseum.bean.Guide;
 import com.cnki.cqmuseum.constant.NavigationStateConstant;
 import com.cnki.cqmuseum.constant.RobotKeyConstant;
 import com.cnki.cqmuseum.interf.OnGuideListener;
+import com.cnki.cqmuseum.interf.OnMarkerCallBack;
+import com.cnki.cqmuseum.interf.OnNaviCallBack;
 import com.cnki.cqmuseum.interf.OnSpeakCallBack;
-import com.cnki.cqmuseum.manager.RobotActionUtils;
 import com.cnki.cqmuseum.manager.RobotManager;
 import com.cnki.cqmuseum.utils.ToastUtils;
-import com.ubtechinc.cruzr.sdk.navigation.NavigationApi;
-import com.ubtechinc.cruzr.sdk.ros.RosConstant;
-import com.ubtechinc.cruzr.sdk.ros.RosRobotApi;
-import com.ubtechinc.cruzr.sdk.speech.SpeechRobotApi;
-import com.ubtechinc.cruzr.serverlibutil.interfaces.NavigationApiCallBackListener;
-import com.ubtechinc.cruzr.serverlibutil.interfaces.RemoteCommonListener;
+import com.ubtrobot.async.DoneCallback;
+import com.ubtrobot.async.FailCallback;
+import com.ubtrobot.emotion.EmotionUris;
+import com.ubtrobot.motion.ActionUris;
+import com.ubtrobot.navigation.Marker;
+import com.ubtrobot.speech.SynthesisException;
 
 import java.util.ArrayList;
 
@@ -31,20 +30,19 @@ public class GuidePresenter extends BasePresenterImpl<IGuideView> {
     //当前位置点的index
     private int curPos = 0;
     private ArrayList<Guide> guides = new ArrayList<>();
+    private Guide pointGuide;
+    private OnGuideListener onGuideListener;
     private static final int MSG_GUIDEPOINT = 1;
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
             switch (msg.what){
                 case MSG_GUIDEPOINT:
-                    NavigationApi.get().startNavigationService((String) msg.obj);
+                    startNaviRoute();
                     break;
             }
         }
     };
-    private Guide pointGuide;
-    private OnGuideListener onGuideListener;
 
     public GuidePresenter(IGuideView view, OnGuideListener onGuideListener) {
         super(view);
@@ -70,95 +68,126 @@ public class GuidePresenter extends BasePresenterImpl<IGuideView> {
         curPos++;
         if (curPos < guides.size() - 1){
             final Guide guide = guides.get(curPos);
-            if (RobotActionUtils.isCanNavi(guide.getName())){
-                RosRobotApi.get().registerCommonCallback(new RemoteCommonListener() {
-                    @Override
-                    public void onResult(int i, int i1, String s) {
+            RobotManager.getMarkerByName(guide.getName(), new OnMarkerCallBack() {
+                @Override
+                public void onSucess(final Marker marker) {
+                    //通知UI改变
+                    mView.notifyGuideUi(guide.getName());
+                    RobotManager.speak("我将要带您前往" + guide.getName() + "，请跟紧我哦")
+                        .done(new DoneCallback<Void>() {
+                            @Override
+                            public void onDone(Void aVoid) {
+                                navigation(marker);
+                            }
+                        })
+                        .fail(new FailCallback<SynthesisException>() {
+                            @Override
+                            public void onFail(SynthesisException e) {
+                                navigation(marker);
+                            }
+                        });
+                }
 
-                    }
-                });
-                NavigationApi.get().setNavigationApiCallBackListener(new NavigationApiCallBackListener() {
-                    @Override
-                    public void onNavigationResult(int i, float v, float v1, float v2) {
+                @Override
+                public void failed() {
+                    finishActivity();
+                }
 
-                    }
+                @Override
+                public void setMsg(String msg) {
 
-                    @Override
-                    public void onRemoteCommonResult(String pointName, int status, String message) {
-                        switch (status) {
-                            case RosConstant.Action.ACTION_FINISHED:
-                                //导航成功
-                                mView.reachBack(guides.get(curPos));
-                                RobotManager.speechVoice("您好" + pointName + "已经到了", new OnSpeakCallBack() {
-                                    @Override
-                                    public void onSpeakEnd() {
-                                        RobotManager.speechVoice(guides.get(curPos).getIntroduce(), new OnSpeakCallBack() {
-                                            @Override
-                                            public void onSpeakEnd() {
-                                                //延迟5秒继续导览
-                                                mHandler.postDelayed(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        startNaviRoute();
-                                                    }
-                                                },5000);
-                                            }
-                                        });
-                                    }
-                                });
-                                break;
-                            case RosConstant.Action.ACTION_CANCEL:
-                                //导航取消
-                                RobotManager.speechVoice("导航取消");
-                                break;
-                            case RosConstant.Action.ACTION_BE_IMPEDED:
-                                //导航遇到障碍
-                                RobotManager.speechVoice("有什么挡到我了");
-                                break;
-                            case RosConstant.Action.ACTION_FAILED:
-                            case RosConstant.Action.ACTION_DEVICE_CONFLICT:
-                            case RosConstant.Action.ACTION_EMERGENCY_STOPPED:
-                            case RosConstant.Action.ACTION_ACCESS_FORBIDDEN:
-                            case RosConstant.Action.ACTION_UNIMPLEMENTED:
-                                //导航失败
-                                RobotManager.speechVoice("导航好像出现了点问题，请联系管理员设置地图", new OnSpeakCallBack() {
-                                    @Override
-                                    public void onSpeakEnd() {
-                                        finishActivityAndAskGoWelcome();
-                                    }
-                                });
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                });
-                //通知UI改变
-                mView.notifyGuideUi(guide.getName());
-                RobotManager.speechVoice("我将要带您前往" + guide.getName() + "，请跟紧我哦");
-                Message msg = Message.obtain();
-                msg.what = MSG_GUIDEPOINT;
-                msg.obj = guide.getName();
-                mHandler.sendMessageDelayed(msg,7000);
-            }else{
-                RobotManager.speechVoice("我的定位好像出问题了，请联系管理员", new OnSpeakCallBack() {
-                    @Override
-                    public void onSpeakEnd() {
-                        finishActivity();
-                    }
-                });
-            }
+                }
+            });
         }else{
             //导览完成，退出界面
-            RobotActionUtils.playSettingAction(RobotKeyConstant.ROBOTKEY_BYE);
-            onGuideListener.finishGuide();
-            RobotManager.speechVoice("我带您的游览已经结束了，下次再见！", new OnSpeakCallBack() {
+            //播报文字
+            RobotManager.speak("我带您的游览已经结束了，下次再见！").done(new DoneCallback<Void>() {
                 @Override
-                public void onSpeakEnd() {
+                public void onDone(Void aVoid) {
+                    //说完话之后隐藏表情
+                    RobotManager.dismissExpressEmotion();
                     finishActivityAndAskGoWelcome();
                 }
             });
+            //握手
+            RobotManager.performAction(ActionUris.GOODBYE);
+            //显示表情
+            RobotManager.expressEmotion(EmotionUris.SMILE);
+            onGuideListener.finishGuide();
         }
+    }
+
+    /**
+     * 导航到某地
+     * @param marker
+     */
+    private void navigation(final Marker marker){
+        RobotManager.startNavigation(marker, new OnNaviCallBack() {
+            @Override
+            public void onSuccess() {
+                //导航成功
+                mView.reachBack(guides.get(curPos));
+                RobotManager.speak("您好" + marker.getTitle() + "已经到了")
+                        .done(new DoneCallback<Void>() {
+                            @Override
+                            public void onDone(Void aVoid) {
+                                RobotManager.speak(guides.get(curPos).getIntroduce())
+                                        .done(new DoneCallback<Void>() {
+                                            @Override
+                                            public void onDone(Void aVoid) {
+                                                //延迟5秒继续导览
+                                               mHandler.sendEmptyMessageDelayed(MSG_GUIDEPOINT, 5000);
+                                            }
+                                        })
+                                        .fail(new FailCallback<SynthesisException>() {
+                                            @Override
+                                            public void onFail(SynthesisException e) {
+                                                //延迟5秒继续导览
+                                                mHandler.sendEmptyMessageDelayed(MSG_GUIDEPOINT, 5000);
+                                            }
+                                        });
+                                }
+                            })
+                        .fail(new FailCallback<SynthesisException>() {
+                            @Override
+                            public void onFail(SynthesisException e) {
+                                RobotManager.speak(guides.get(curPos).getIntroduce())
+                                        .done(new DoneCallback<Void>() {
+                                            @Override
+                                            public void onDone(Void aVoid) {
+                                                //延迟5秒继续导览
+                                                mHandler.sendEmptyMessageDelayed(MSG_GUIDEPOINT, 5000);
+                                            }
+                                        })
+                                        .fail(new FailCallback<SynthesisException>() {
+                                            @Override
+                                            public void onFail(SynthesisException e) {
+                                                //延迟5秒继续导览
+                                                mHandler.sendEmptyMessageDelayed(MSG_GUIDEPOINT, 5000);
+                                            }
+                                        });
+                            }
+                        });
+            }
+
+            @Override
+            public void onFailed() {
+                //导航失败
+                RobotManager.speak("导航好像出现了点问题，请联系管理员设置地图")
+                    .done(new DoneCallback<Void>() {
+                        @Override
+                        public void onDone(Void aVoid) {
+                            finishActivityAndAskGoWelcome();
+                        }
+                    })
+                    .fail(new FailCallback<SynthesisException>() {
+                        @Override
+                        public void onFail(SynthesisException e) {
+                            finishActivityAndAskGoWelcome();
+                        }
+                    });
+            }
+        });
     }
 
     /**
@@ -167,8 +196,8 @@ public class GuidePresenter extends BasePresenterImpl<IGuideView> {
     public void stopNaviRoute(){
         GuideActivity.naviState = NavigationStateConstant.STATE_PAUSE;
         mHandler.removeMessages(MSG_GUIDEPOINT);
-        NavigationApi.get().stopNavigationService();
-        RobotManager.speechVoice("停止导航成功");
+        RobotManager.stopNavigation();
+        RobotManager.speak("停止导航成功");
         finishActivityAndAskGoWelcome();
     }
 
@@ -178,7 +207,7 @@ public class GuidePresenter extends BasePresenterImpl<IGuideView> {
     public void pauseNaviRoute(){
         GuideActivity.naviState = NavigationStateConstant.STATE_PAUSE;
         mHandler.removeMessages(MSG_GUIDEPOINT);
-        RobotActionUtils.stopNavigation();
+        RobotManager.stopNavigation();
         onGuideListener.pauseGuide();
     }
 
@@ -203,73 +232,69 @@ public class GuidePresenter extends BasePresenterImpl<IGuideView> {
                 break;
             }
         }
-        RosRobotApi.get().registerCommonCallback(new RemoteCommonListener() {
-            @Override
-            public void onResult(int i, int i1, String s) {
-
-            }
-        });
-        NavigationApi.get().setNavigationApiCallBackListener(new NavigationApiCallBackListener() {
-            @Override
-            public void onNavigationResult(int i, float v, float v1, float v2) {
-
-            }
-
-            @Override
-            public void onRemoteCommonResult(String pointName, int status, String message) {
-                switch (status) {
-                    case RosConstant.Action.ACTION_FINISHED:
-                        //导航成功
-                        if (pointGuide != null){
-                            mView.reachBack(pointGuide);
-                        }
-                        RobotManager.speechVoice("您好" + pointName + "已经到了", new OnSpeakCallBack() {
-                            @Override
-                            public void onSpeakEnd() {
-                                RobotManager.speechVoice(pointGuide.getIntroduce(), new OnSpeakCallBack() {
-                                    @Override
-                                    public void onSpeakEnd() {
-                                        //关闭界面
-                                        finishActivityAndAskGoWelcome();
-                                    }
-                                });
-                            }
-                        });
-                        break;
-                    case RosConstant.Action.ACTION_CANCEL:
-                        //导航取消
-                        RobotManager.speechVoice("导航取消");
-                        finishActivity();
-                        break;
-                    case RosConstant.Action.ACTION_BE_IMPEDED:
-                        //导航遇到障碍
-                        RobotManager.speechVoice("有什么挡到我了");
-                        break;
-                    case RosConstant.Action.ACTION_FAILED:
-                    case RosConstant.Action.ACTION_DEVICE_CONFLICT:
-                    case RosConstant.Action.ACTION_EMERGENCY_STOPPED:
-                    case RosConstant.Action.ACTION_ACCESS_FORBIDDEN:
-                    case RosConstant.Action.ACTION_UNIMPLEMENTED:
-                        //导航失败
-                        RobotManager.speechVoice("导航好像出现了点问题，请联系管理员设置地图", new OnSpeakCallBack() {
-                            @Override
-                            public void onSpeakEnd() {
-                                finishActivityAndAskGoWelcome();
-                            }
-                        });
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
         //通知UI改变
         mView.notifyGuideUi(point);
-        RobotManager.speechVoice("我将要带您前往" + point + "，请跟紧我哦");
-        Message msg = Message.obtain();
-        msg.what = MSG_GUIDEPOINT;
-        msg.obj = point;
-        mHandler.sendMessageDelayed(msg,7000);
+        RobotManager.speak("我将要带您前往" + point + "，请跟紧我哦")
+            .done(new DoneCallback<Void>() {
+                @Override
+                public void onDone(Void aVoid) {
+                    RobotManager.getMarkerByName(point, new OnMarkerCallBack() {
+                        @Override
+                        public void onSucess(Marker marker) {
+                            RobotManager.startNavigation(marker, new OnNaviCallBack() {
+                                @Override
+                                public void onSuccess() {
+                                    //导航成功
+                                    if (pointGuide != null){
+                                        mView.reachBack(pointGuide);
+                                    }
+                                    RobotManager.speak("您好" + point + "已经到了")
+                                        .done(new DoneCallback<Void>() {
+                                            @Override
+                                            public void onDone(Void aVoid) {
+                                                RobotManager.speak(pointGuide.getIntroduce())
+                                                        .done(new DoneCallback<Void>() {
+                                                            @Override
+                                                            public void onDone(Void aVoid) {
+                                                                //关闭界面
+                                                                finishActivityAndAskGoWelcome();
+                                                            }
+                                                        });
+                                            }
+                                        });
+                                }
+
+                                @Override
+                                public void onFailed() {
+                                    RobotManager.speak("导航异常，请重新尝试")
+                                            .done(new DoneCallback<Void>() {
+                                                @Override
+                                                public void onDone(Void aVoid) {
+                                                    finishActivityAndAskGoWelcome();
+                                                }
+                                            });
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void failed() {
+                            finishActivity();
+                        }
+
+                        @Override
+                        public void setMsg(String msg) {
+
+                        }
+                    });
+                }
+            })
+            .fail(new FailCallback<SynthesisException>() {
+                @Override
+                public void onFail(SynthesisException e) {
+
+                }
+            });
     }
 
     /**
@@ -277,12 +302,7 @@ public class GuidePresenter extends BasePresenterImpl<IGuideView> {
      */
     private void finishActivity(){
         //关闭界面
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ((GuideActivity)mContext).finish();
-            }
-        },2000);
+        ((GuideActivity)mContext).finish();
     }
 
     /**
@@ -292,94 +312,24 @@ public class GuidePresenter extends BasePresenterImpl<IGuideView> {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                RobotManager.speechVoice("需要我返回接待点吗？", new OnSpeakCallBack() {
-                    @Override
-                    public void onSpeakEnd() {
-                        //延迟3s等待用户是否需要返回接待点
-                        mHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                //判断是否需要返回接待点
-                                if (GuideActivity.isNeedGoHome){
-                                    RobotActionUtils.goPointNavi(mContext, "接待点");
+                RobotManager.speak("需要我返回接待点吗？")
+                    .done(new DoneCallback<Void>() {
+                        @Override
+                        public void onDone(Void aVoid) {
+                            //延迟3s等待用户是否需要返回接待点
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //判断是否需要返回接待点
+                                    if (GuideActivity.isNeedGoHome){
+                                        RobotManager.goPoint("接待点");
+                                    }
+                                    ((GuideActivity)mContext).finish();
                                 }
-                                ((GuideActivity)mContext).finish();
-                            }
-                        }, 3000);
-                    }
-                });
+                            }, 3000);
+                        }
+                    });
             }
         },2000);
-    }
-
-    /**
-     * 返回接待点
-     * @param msg
-     */
-    public void goWelcomePoint(String msg){
-        //判断如果正在讲话，则停止讲话
-        if (RobotManager.isSpeaking()){
-            RobotManager.stopSpeech();
-        }
-        //设置为返航中
-        GuideActivity.naviState = NavigationStateConstant.STATE_RETURN;
-        final Guide welcomePoint = guides.get(0);
-        NavigationApi.get().setNavigationApiCallBackListener(new NavigationApiCallBackListener() {
-            @Override
-            public void onNavigationResult(int i, float v, float v1, float v2) {
-
-            }
-
-            @Override
-            public void onRemoteCommonResult(String pointName, int status, String message) {
-                switch (status) {
-                    case RosConstant.Action.ACTION_FINISHED:
-                        RobotManager.speechVoice("返回接待点成功");
-                        ((GuideActivity)mContext).finish();
-                        break;
-                    case RosConstant.Action.ACTION_CANCEL:
-                        RobotManager.speechVoice("取消返回接待点");
-                        //导航取消
-                        ((GuideActivity)mContext).finish();
-                        break;
-                    case RosConstant.Action.ACTION_BE_IMPEDED:
-                        //导航遇到障碍
-                        RobotManager.speechVoice("有什么挡到我了");
-                        break;
-                    case RosConstant.Action.ACTION_UNIMPLEMENTED:
-                        //导航失败
-                        RobotManager.speechVoice("导航好像出现了点问题，请联系管理员设置地图", new OnSpeakCallBack() {
-                            @Override
-                            public void onSpeakEnd() {
-                                NavigationApi.get().stopNavigationService();
-                                ((GuideActivity)mContext).finish();
-                            }
-                        });
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-        RobotManager.speechVoice(msg, new OnSpeakCallBack() {
-            @Override
-            public void onSpeakEnd() {
-                RobotActionUtils.playSettingAction(RobotKeyConstant.ROBOTKEY_BYE);
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        //回接待点
-                        if (RobotActionUtils.isCanNavi(welcomePoint.getName())){
-                            //通知UI改变
-                            mView.notifyGuideUi(welcomePoint.getName());
-                            NavigationApi.get().startNavigationService(welcomePoint.getName());
-                        }else{
-                            ToastUtils.toast(mContext,"我的定位好像出问题了，请联系管理员");
-                            finishActivity();
-                        }
-                    }
-                },15000);
-            }
-        });
     }
 }

@@ -2,52 +2,60 @@ package com.cnki.cqmuseum.manager;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
-import com.cnki.cqmuseum.bean.AnswerBean;
 import com.cnki.cqmuseum.bean.BaseEvenBusBean;
-import com.cnki.cqmuseum.bean.RobotResultBean;
-import com.cnki.cqmuseum.constant.ChatViewTypeConstant;
 import com.cnki.cqmuseum.constant.EvenBusConstant;
 import com.cnki.cqmuseum.constant.IntentActionConstant;
 import com.cnki.cqmuseum.constant.RobotConstant;
-import com.cnki.cqmuseum.constant.RobotKeyConstant;
-import com.cnki.cqmuseum.interf.OnASRCallBack;
-import com.cnki.cqmuseum.interf.OnRobotAnswerCallBack;
-import com.cnki.cqmuseum.interf.OnSpeakCallBack;
-import com.cnki.cqmuseum.interf.SpeakEndCallBack;
+import com.cnki.cqmuseum.constant.RobotDomainConstant;
+import com.cnki.cqmuseum.interf.OnMarkerCallBack;
+import com.cnki.cqmuseum.interf.OnNaviCallBack;
 import com.cnki.cqmuseum.ui.chat.ChatActivity;
 import com.cnki.cqmuseum.ui.collection.CollectionActivity;
-import com.cnki.cqmuseum.ui.guide.GuideActivity;
+import com.cnki.cqmuseum.ui.navigation.NavigationActivity;
 import com.cnki.cqmuseum.utils.LogUtils;
-import com.cnki.cqmuseum.utils.TextStyleUtils;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.ubtechinc.cruzr.sdk.dance.DanceConnectionListener;
-import com.ubtechinc.cruzr.sdk.dance.DanceControlApi;
-import com.ubtechinc.cruzr.sdk.navigation.NavigationApi;
-import com.ubtechinc.cruzr.sdk.ros.RosRobotApi;
-import com.ubtechinc.cruzr.sdk.speech.ISpeechContext;
-import com.ubtechinc.cruzr.sdk.speech.SpeechConstant;
-import com.ubtechinc.cruzr.sdk.speech.SpeechRobotApi;
-import com.ubtechinc.cruzr.serverlibutil.interfaces.InitListener;
-import com.ubtechinc.cruzr.serverlibutil.interfaces.SpeechASRListener;
-import com.ubtechinc.cruzr.serverlibutil.interfaces.SpeechTtsListener;
+import com.ubtrobot.Robot;
+import com.ubtrobot.async.CancelledCallback;
 import com.ubtrobot.async.DoneCallback;
 import com.ubtrobot.async.FailCallback;
-import com.ubtrobot.speech.AbstractNLUParamGenerator;
-import com.ubtrobot.speech.LegacyUnderstandResult;
-import com.ubtrobot.speech.LegacyUnderstander;
+import com.ubtrobot.async.ProgressCallback;
+import com.ubtrobot.async.ProgressivePromise;
+import com.ubtrobot.async.Promise;
+import com.ubtrobot.emotion.EmotionException;
+import com.ubtrobot.emotion.EmotionManager;
+import com.ubtrobot.emotion.EmotionUris;
+import com.ubtrobot.emotion.ExpressingProgress;
+import com.ubtrobot.motion.ActionUris;
+import com.ubtrobot.motion.MotionManager;
+import com.ubtrobot.motion.PerformingException;
+import com.ubtrobot.motion.PerformingProgress;
+import com.ubtrobot.navigation.Marker;
+import com.ubtrobot.navigation.NavMap;
+import com.ubtrobot.navigation.NavMapException;
+import com.ubtrobot.navigation.NavigationException;
+import com.ubtrobot.navigation.NavigationProgress;
+import com.ubtrobot.orchestration.OrchestrationManager;
+import com.ubtrobot.orchestration.OrchestrationUris;
+import com.ubtrobot.orchestration.PlayException;
+import com.ubtrobot.orchestration.PlayProgress;;
+import com.ubtrobot.speech.RecognitionException;
+import com.ubtrobot.speech.RecognitionOption;
+import com.ubtrobot.speech.RecognitionProgress;
+import com.ubtrobot.speech.RecognitionResult;
 import com.ubtrobot.speech.SpeechManager;
-import com.ubtrobot.speech.UnderstandConstant;
-import com.ubtrobot.speech.UnderstandException;
-import com.ubtrobot.speech.UnderstandOption;
-import com.ubtrobot.speech.understand.CruzrLegacyUnderstanderFactory;
-import com.ubtrobot.speech.understand.xml.MapManager;
-import com.ubtrobot.speech.understand.xml.XmlHelper;
+import com.ubtrobot.speech.SynthesisException;
+import com.ubtrobot.speech.SynthesisProgress;
+import com.ubtrobot.speech.UnderstandingException;
+import com.ubtrobot.speech.UnderstandingResult;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+
+import java.io.File;
+import java.util.Random;
 
 /**
  * 机器人api管理类
@@ -56,60 +64,68 @@ import org.greenrobot.eventbus.EventBus;
 
 public class RobotManager {
 
-    private static SpeechTtsListener speechTtsListener;
-    private static LegacyUnderstander understander;
-    private static UnderstandOption.Builder builder;
-    private static Gson gson;
+    private static SpeechManager speechManager;
+    private static ProgressivePromise<RecognitionResult, RecognitionException, RecognitionProgress> recognize;
+    private static OrchestrationManager danceManager;
+    //舞蹈数组
+    private static Uri[] danceUris = new Uri[]{
+            OrchestrationUris.NAXI,OrchestrationUris.BBOOM_BBOOM,OrchestrationUris.FLAMENCO,OrchestrationUris.MODERN,OrchestrationUris.TOCA_TOCA,OrchestrationUris.CRAYON,
+            OrchestrationUris.SEAWEED,OrchestrationUris.CURRY,OrchestrationUris.IEVAN_POLKKA,OrchestrationUris.PANAMA,OrchestrationUris.FADED,OrchestrationUris.DURA
+    };
+    private static MotionManager motionManager;
+    private static ProgressivePromise<Void, PerformingException, PerformingProgress> actionPromise;
+    private static EmotionManager emotionManager;
+    private static String topActivity = "";
     public static boolean isListen = true;//机器人是否接受语音问题
-    private static float mProgress;
-    private static boolean isAbort = false;
+    private static ProgressivePromise<Void, SynthesisException, SynthesisProgress> speakPromise;
+    private static NavigationManagerCompat navigationManager;
+    private static ProgressivePromise<Void, NavigationException, NavigationProgress> navigatePromise;
 
     /**
-     * 设置机器人
+     * 初始化一些服务
      */
-    public static void setRobotSetting(final Context mContext) {
-        speechTtsListener = new SpeechTtsListener();
-        //进入app后再次重新设置，避免以前初始化过异常问题
-        SpeechRobotApi.get().initializ(mContext, RobotConstant.APPID, new InitListener() {
-            @Override
-            public void onInit() {
-                //初始化成功
-                LogUtils.e("robot","语音初始化完成！");
-                // 所有在线指令会分发给 app 9003 ,离线指令按照正常指令分发
-                setOnlineSpeechMode();
-                RobotManager.setEnableWake(3, true);
-//                SpeechRobotApi.get().enableWakeup(SpeechConstant.WAKE_UP_TYPE_SPEECH, true);
-                SpeechRobotApi.get().registerSpeech(new ISpeechContext() {
-                    @Override
-                    public void onStart() {
-                        LogUtils.e("robot","registerSpeech  onStart");
-                    }
+    public static void initService(){
+        //语音服务
+        speechManager = Robot.globalContext()
+                .getSystemService(SpeechManager.SERVICE);
+        //编排服务
+        danceManager = Robot.globalContext()
+                .getSystemService(OrchestrationManager.SERVICE);
+        //运动服务
+        motionManager = Robot.globalContext().
+                getSystemService(MotionManager.SERVICE);
+        //情绪服务
+        emotionManager = Robot.globalContext()
+                .getSystemService(EmotionManager.SERVICE);
+        //导航服务
+        navigationManager = new NavigationManagerCompat(Robot.globalContext());
+    }
 
-                    @Override
-                    public void onStop() {
-                        LogUtils.e("robot","registerSpeech  onStop");
-                    }
+    /**
+     * 语音播报
+     * @param voice
+     * @return
+     */
+    public static  ProgressivePromise<Void, SynthesisException, SynthesisProgress> speak(String voice){
+        speakPromise = speechManager.synthesize(voice);
+        return speakPromise;
+    }
 
-                    @Override
-                    public void onResult(String s) {
-                        LogUtils.e("robot","registerSpeech  onResult:" + s);
-                        handleResult(mContext, s);
-                    }
+    /**
+     * 停止说话
+     */
+    public static void stopSpeak(){
+        if (speakPromise != null){
+            speakPromise.cancel();
+        }
+    }
 
-                    @Override
-                    public void onPause() {
-                        LogUtils.e("robot","registerSpeech  onPause");
-                    }
-
-                    @Override
-                    public void onResume() {
-                        LogUtils.e("robot","registerSpeech  onResume");
-                    }
-                });
-
-                SpeechRobotApi.get().speechStartTTS("您好，知网小智正在为您服务", speechTtsListener);
-            }
-        });
+    /**
+     * 是否正在播报
+     * @return
+     */
+    public static boolean isSpeaking(){
+        return speechManager.isSynthesizing();
     }
 
     /**
@@ -121,108 +137,160 @@ public class RobotManager {
         return result.contains("小智") || result.contains("小志") || result.contains("小子") || result.contains("乔治");
     }
 
+
     /**
-     * 对返回结果进行处理
+     * 语音持续识别接口
      * @param context
-     * @param json
      */
-    private static void handleResult(Context context,String json){
-        if (!TextUtils.isEmpty(json)){
-            RobotResultBean robotResultBean = gson.fromJson(json, RobotResultBean.class);
-            if (robotResultBean != null && robotResultBean.onlu != null && !TextUtils.isEmpty(robotResultBean.onlu.request)){
-                //获取到机器人结果
-                String result = robotResultBean.onlu.request;
-                LogUtils.e("robot","识别到的结果：" + result);
-                //将机器人结果转为拼音
-//                String pinResult = TextStyleUtils.toPinyin(result);
-                //首先判断是否正在说话，如果是说话中则判断是否说的为停止说话
-                if (isSpeaking()){
-                    if ((isXZH(result) && result.contains("别说")) || (isXZH(result) && result.contains("闭嘴"))
-                            || isXZH(result) && (result.contains("不要") || result.contains("停止")) && result.contains("说")){
-                        //停止说话
-                        stopSpeech();
-                        RobotManager.speechVoice("好哒");
+    public static void recognize(final Context context){
+        if (recognize != null){
+            recognize.cancel();
+        }
+        recognize = speechManager.recognize(new RecognitionOption.Builder(RecognitionOption.MODE_CONTINUOUS).build());
+        recognize.fail(new FailCallback<RecognitionException>() {
+            @Override
+            public void onFail(RecognitionException e) {
+                e.printStackTrace();
+                recognize(context);
+            }
+        }).progress(new ProgressCallback<RecognitionProgress>() {
+            @Override
+            public void onProgress(RecognitionProgress recognitionProgress) {
+                //将语音识别结果进行处理
+                if (!TextUtils.isEmpty(recognitionProgress.getTextResult())){
+                    topActivity = ActivityViewManager.getInstance().getTopActivity(context);
+                    if (isSpeaking()){
+                        if ((isXZH(recognitionProgress.getTextResult()) && recognitionProgress.getTextResult().contains("别说")) || (isXZH(recognitionProgress.getTextResult()) && recognitionProgress.getTextResult().contains("闭嘴"))
+                                || isXZH(recognitionProgress.getTextResult()) && (recognitionProgress.getTextResult().contains("不要") || recognitionProgress.getTextResult().contains("停止")) && recognitionProgress.getTextResult().contains("说")){
+                            //停止说话
+                            stopSpeak();
+                            speak("好的，我保持安静");
+                        }
+                        return;
                     }
-                    return;
+                    //导览控制器
+                    if ("com.cnki.cqmuseum.ui.guide.GuideActivity".equals(topActivity)){
+                        if (recognitionProgress.getTextResult().equals("停止导航")){
+                            BaseEvenBusBean<String> naviEvenBus = new BaseEvenBusBean<>(EvenBusConstant.EVENBUS_STOPNAVI);
+                            EventBus.getDefault().post(naviEvenBus);
+                        }else if (recognitionProgress.getTextResult().equals("继续导航")){
+                            BaseEvenBusBean<String> naviEvenBus = new BaseEvenBusBean<>(EvenBusConstant.EVENBUS_CONTINUENAVI);
+                            EventBus.getDefault().post(naviEvenBus);
+                        }else if (recognitionProgress.getTextResult().equals("暂停导航")){
+                            BaseEvenBusBean<String> naviEvenBus = new BaseEvenBusBean<>(EvenBusConstant.EVENBUS_PAUSENAVI);
+                            EventBus.getDefault().post(naviEvenBus);
+                        }else if (recognitionProgress.getTextResult().equals("需要")){
+                            BaseEvenBusBean<String> naviEvenBus = new BaseEvenBusBean<>(EvenBusConstant.EVENBUS_GOHOME);
+                            EventBus.getDefault().post(naviEvenBus);
+                        }
+                        return;
+                    }else if("com.cnki.cqmuseum.ui.collection.CollectionActivity".equals(topActivity) && CollectionActivity.isPressDown){
+                        //精品文物长按搜索文物
+                        BaseEvenBusBean<String> evenBusBean = new BaseEvenBusBean<>(EvenBusConstant.EVENBUS_COLLECTIONTEXT);
+                        evenBusBean.setObject(recognitionProgress.getTextResult());
+                        EventBus.getDefault().post(evenBusBean);
+                        return;
+                    }else if ((recognitionProgress.getTextResult().startsWith("带我去") || recognitionProgress.getTextResult().startsWith("小智带我去")))
+                        if (isListen){
+                            Intent intent = new Intent(context, NavigationActivity.class);
+//                            intent.putExtra(IntentActionConstant.NAVI_LOCATION, )
+                        }
+                    LogUtils.e("robot","机器人识别结果:" + recognitionProgress.getTextResult());
+                    understantSpeak(context, recognitionProgress.getTextResult());
                 }
-                //只有包含机器人名字才能进入固定的语音判断
-                if (isXZH(result)){
-                    //再见
-                    if ((result.contains("再见") || result.contains("拜拜"))){
-                        RobotActionUtils.playSettingAction(RobotKeyConstant.ROBOTKEY_BYE);
-                        RobotManager.speechVoice("和您聊天很愉快，我们下次再见");
-                        return;
-                    }
-                    //拥抱
-                    if (result.contains("抱")){
-                        RobotActionUtils.playSettingAction(RobotKeyConstant.ROBOTKEY_HUG);
-                        RobotManager.speechVoice("抱抱");
-                        return;
-                    }
-                    //握手
-                    if (result.contains("握")){
-                        RobotActionUtils.playSettingAction(RobotKeyConstant.ROBOTKEY_SHANKHAND);
-                        RobotManager.speechVoice("你好啊");
-                        return;
-                    }
-                    //跳舞
-                    if (result.contains("跳") && result.contains("舞")){
-                        speechDothing("我将要开始跳舞了，请跟我保持一些距离", new SpeakEndCallBack() {
+            }
+        });
+    }
+
+    /**
+     * 语义理解接口
+     * @param context
+     * @param inputText
+     */
+    public static void understantSpeak(final Context context, final String inputText){
+        final Promise<UnderstandingResult, UnderstandingException> understand = speechManager.understand((inputText.startsWith("今天天气") || inputText.startsWith("明天天气"))? RobotConstant.ROBOT_CITY + inputText : inputText);
+        understand.done(new DoneCallback<UnderstandingResult>() {
+            @Override
+            public void onDone(final UnderstandingResult understandingResult) {
+                LogUtils.e("robot","机器人理解结果为：" + understandingResult.getSpeechFulfillment().getText());
+                switch (understandingResult.getIntent().getAction()){
+                    case RobotDomainConstant.SAY_HELLO://问好
+                        //播报文字
+                        speak(understandingResult.getSpeechFulfillment().getText()).done(new DoneCallback<Void>() {
                             @Override
-                            public void doSomething() {
-                                RobotActionUtils.startDance();
+                            public void onDone(Void aVoid) {
+                                //说完话之后隐藏表情
+                                dismissExpressEmotion();
+                            }
+                        });
+                        //握手
+                        performAction(ActionUris.HANDSHAKE);
+                        //显示表情
+                        expressEmotion(EmotionUris.HAPPY);
+                        return;
+                    case RobotDomainConstant.DANCE://跳舞
+                        speak("我要开始跳舞啦，注意不要靠我太近").done(new DoneCallback<Void>() {
+                            @Override
+                            public void onDone(Void aVoid) {
+                                //随机跳一个舞蹈
+                                dance();
                             }
                         });
                         return;
-                    }
-                    //停止跳舞
-                    if (result.contains("跳") && (result.contains("别") || result.contains("停止") )){
-                        RobotActionUtils.stopDance();
+                    case RobotDomainConstant.SING://唱歌
+                        playMusic(context);
                         return;
-                    }
+                    case RobotDomainConstant.HUG://拥抱
+                        //播报并拥抱
+                        speak("来抱抱啦");
+                        //拥抱
+                        performAction(ActionUris.HUG).done(new DoneCallback<Void>() {
+                            @Override
+                            public void onDone(Void aVoid) {
+                                //说完话之后隐藏表情
+                                dismissExpressEmotion();
+                            }
+                        }).fail(new FailCallback<PerformingException>() {
+                            @Override
+                            public void onFail(PerformingException e) {
+                                //说完话之后隐藏表情
+                                dismissExpressEmotion();
+                            }
+                        });
+                        //显示表情
+                        expressEmotion(EmotionUris.SHY);
+                        return;
+                    case RobotDomainConstant.SHAKE_HANDS://握手
+                        //播报并握手
+                        speak("你好，很高兴认识你").done(new DoneCallback<Void>() {
+                            @Override
+                            public void onDone(Void aVoid) {
+                                //说完话之后隐藏表情
+                                dismissExpressEmotion();
+                            }
+                        });
+                        //握手
+                        performAction(ActionUris.HANDSHAKE);
+                        //显示表情
+                        expressEmotion(EmotionUris.LOVE);
+                        return;
                 }
-                String topActivity = ActivityViewManager.getInstance().getTopActivity(context);
-                //导航去指定地点
-                if ((result.startsWith("带我去") || result.startsWith("小智带我去"))){
-                    //如果关闭语音，则不进行问答
-                    if (isListen){
-                        //导航去某地
-                        RobotActionUtils.goPointNavi(context, result);
+                String robotMsg = "";
+                //判断机器人答案是否为空
+                if (TextUtils.isEmpty(understandingResult.getSpeechFulfillment().getText())){
+                    try {
+                        if (understandingResult.getFulfillmentList() != null && understandingResult.getFulfillmentList().getJsonArray() != null &&
+                            understandingResult.getFulfillmentList().getJsonArray().getJSONObject(0) != null){
+                            robotMsg = understandingResult.getFulfillmentList().getJsonArray().getJSONObject(0).getString("reply");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    return;
+                }else{
+                    //否则
+                    robotMsg = understandingResult.getSpeechFulfillment().getText();
                 }
-                //开始导览
-                if (result.equals("开始导航") || ( (result.contains("游览") || result.contains("参观")) && result.contains("带"))){
-                    if ("com.cnki.cqmuseum.ui.guide.GuideActivity".equals(topActivity)){
-                        BaseEvenBusBean<String> naviEvenBus = new BaseEvenBusBean<>(EvenBusConstant.EVENBUS_STARTNAVI);
-                        EventBus.getDefault().post(naviEvenBus);
-                    }else{
-                        //先跳转再开始导览
-                        Intent intent = new Intent(context, GuideActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra(IntentActionConstant.NAVI_GUIDE,"start");
-                        context.startActivity(intent);
-                    }
-                    return;
-                }
-                //导览控制器
-                if ("com.cnki.cqmuseum.ui.guide.GuideActivity".equals(topActivity)){
-                    if (result.equals("停止导航")){
-                        BaseEvenBusBean<String> naviEvenBus = new BaseEvenBusBean<>(EvenBusConstant.EVENBUS_STOPNAVI);
-                        EventBus.getDefault().post(naviEvenBus);
-                    }else if (result.equals("继续导航")){
-                        BaseEvenBusBean<String> naviEvenBus = new BaseEvenBusBean<>(EvenBusConstant.EVENBUS_CONTINUENAVI);
-                        EventBus.getDefault().post(naviEvenBus);
-                    }else if (result.equals("暂停导航")){
-                        BaseEvenBusBean<String> naviEvenBus = new BaseEvenBusBean<>(EvenBusConstant.EVENBUS_PAUSENAVI);
-                        EventBus.getDefault().post(naviEvenBus);
-                    }else if (result.equals("需要")){
-                        BaseEvenBusBean<String> naviEvenBus = new BaseEvenBusBean<>(EvenBusConstant.EVENBUS_GOHOME);
-                        EventBus.getDefault().post(naviEvenBus);
-                    }
-                    return;
-                }
-                //语音问答分发
+                //如果没有匹配到以上意图，则进行分发
                 if ("com.cnki.cqmuseum.ui.chat.ChatActivity".equals(topActivity)) {
                     //如果关闭语音，则不进行问答
                     if (!isListen){
@@ -230,7 +298,8 @@ public class RobotManager {
                     }
                     //如果当前界面是聊天页，直接发送问题
                     BaseEvenBusBean<String> evenBusBean = new BaseEvenBusBean<>(EvenBusConstant.EVENBUS_ROBOTQUESTION);
-                    evenBusBean.setObject(result);
+                    evenBusBean.setObject(inputText);
+                    evenBusBean.setRobotMsg(robotMsg);
                     EventBus.getDefault().post(evenBusBean);
                 } else if ("com.cnki.cqmuseum.ui.home.HomeActivity".equals(topActivity)) {
                     //如果关闭语音，则不进行问答
@@ -239,307 +308,190 @@ public class RobotManager {
                     }
                     // 如果当前是首页，则跳转到 ChatActivity进行回答问题
                     Intent intent = new Intent();
-                    intent.putExtra(IntentActionConstant.ACTION_QUESTION, result);
+                    intent.putExtra(IntentActionConstant.ACTION_QUESTION, inputText);
+                    intent.putExtra(IntentActionConstant.ROBOT_MSG, robotMsg);
                     intent.setClass(context, ChatActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
-                }else if("com.cnki.cqmuseum.ui.collection.CollectionActivity".equals(topActivity) && CollectionActivity.isPressDown){
-                    BaseEvenBusBean<String> evenBusBean = new BaseEvenBusBean<>(EvenBusConstant.EVENBUS_COLLECTIONTEXT);
-                    evenBusBean.setObject(result);
-                    EventBus.getDefault().post(evenBusBean);
                 }
             }
+        });
+    }
+
+    /**
+     * 跳舞
+     */
+    public static ProgressivePromise<Void, PlayException, PlayProgress> dance(){
+        Random random = new Random();
+        int i = random.nextInt(danceUris.length - 1);
+        return danceManager.play(danceUris[i]);
+    }
+
+    /**
+     * 做动作
+     * @param actionUri
+     */
+    public static ProgressivePromise<Void, PerformingException, PerformingProgress> performAction(Uri actionUri){
+        if (actionPromise != null){
+            actionPromise.cancel();
         }
+        return actionPromise = motionManager.performAction(actionUri);
     }
 
     /**
-     * 销毁掉语音服务
+     * 显示表情
+     * @param emotionUri
      */
-    public static void destorySpeachService(){
-        //退出app之前设置为正常模式
-        SpeechRobotApi.get().speechPermissionDispatch(RobotConstant.APPID, SpeechConstant.SPEECH_DISPATCH_PERMISSION_NONE);
-        SpeechRobotApi.get().destory();
+    public static ProgressivePromise<Void, EmotionException, ExpressingProgress> expressEmotion(Uri emotionUri){
+        return emotionManager.express(emotionUri);
     }
 
     /**
-     * 设置机器人为正常的聊天模式
-     * 全部指令由机器人接管
-     */
-    public static void setNormalSpeechMode(){
-        SpeechRobotApi.get().speechPermissionDispatch(RobotConstant.APPID, SpeechConstant.SPEECH_DISPATCH_PERMISSION_NONE);
-    }
-
-    /**
-     * 所有指令都分发给程序
-     * 设置机器人为截获语音信息，程序进行处理
-     */
-    public static void setOnlineSpeechMode(){
-        SpeechRobotApi.get().speechPermissionDispatch(RobotConstant.APPID, SpeechConstant.SPEECH_DISPATCH_PERMISSION_ALL);
-    }
-
-    /**
-     * 初始化机器人
-     */
-    public static void initRobot(Context context) {
-        //初始化机器人api
-        RosRobotApi.get().initializ(context, null);
-        //初始化导航api
-        NavigationApi.get().initializ(context);
-        // 机器人动作关节初始化
-        RosRobotApi.get().initializ(context, new InitListener() {
-            @Override
-            public void onInit() {
-                //初始化成功
-                System.out.println("初始化成功...");
-            }
-        });
-        // 创建 understand
-        MapManager mapManager = XmlHelper.get().getIntentMapManager();
-        builder = new UnderstandOption.Builder();
-        String language = "zh-CN";
-        builder.setLanguage(language);
-        understander = (new CruzrLegacyUnderstanderFactory(context)).createUnderstander("zhujian", language, new AbstractNLUParamGenerator() {
-            @Override
-            public Bundle getBundle(String s) {
-                Bundle bundle = new Bundle();
-                switch (s) {
-                    case UnderstandConstant.SOURCE_EMOTIBOT:
-                        bundle.putString(UnderstandConstant.SOURCE_EMOTIBOT_APPID,
-                                //填写正确的appid
-                                RobotConstant.ROBOT_APPID);
-                        bundle.putString(UnderstandConstant.SOURCE_EMOTIBOT_USERID,
-                                //"序列号：Cruzr.01.1234567,则填写1234567"
-                                RobotConstant.ROBOT_NUM);
-                        bundle.putString(UnderstandConstant.SOURCE_EMOTIBOT_CITY,
-                                //对应的城市
-                                RobotConstant.ROBOT_CITY);
-                }
-                return bundle;
-            }
-        }, mapManager);
-        // json宽松
-        //支持Map的key为复杂对象的形式
-        //智能null
-        gson = new GsonBuilder()
-                    .setLenient()// json宽松
-                    .enableComplexMapKeySerialization()//支持Map的key为复杂对象的形式
-                    .serializeNulls() //智能null
-                    .create();
-    }
-
-    /**
-     * 停止播报
-     */
-    public static void stopSpeech(){
-        isAbort = true;
-        SpeechRobotApi.get().speechStopTTS();
-    }
-
-    /**
-     * 播报
-     * @param speechStr
-     */
-    public static void speechVoice(String speechStr){
-        isAbort = false;
-        SpeechRobotApi.get().speechStartTTS(speechStr, speechTtsListener);
-    }
-
-    /**
-     * 播报完成进行某些动作回调
-     * @param str
-     * @param callBack
-     */
-    public static void speechDothing(String str, final SpeakEndCallBack callBack){
-        isAbort = false;
-        SpeechRobotApi.get().speechStartTTS(str, new SpeechTtsListener(){
-            @Override
-            public void onEnd() {
-                super.onEnd();
-                callBack.doSomething();
-            }
-
-
-            @Override
-            public void onAbort() {
-                super.onAbort();
-                callBack.doSomething();
-            }
-
-        });
-    }
-
-    /**
-     * 播报，带播报完通知回调
-     * @param str
-     * @param onSpeakCallBack
-     */
-    public static void speechVoice(final String str, final OnSpeakCallBack onSpeakCallBack){
-        mProgress = 0;
-        isAbort = false;
-        SpeechRobotApi.get().speechStartTTS(str, new SpeechTtsListener(){
-            @Override
-            public void onEnd() {
-                super.onEnd();
-                onSpeakCallBack.onSpeakEnd();
-            }
-
-            @Override
-            public void onSpeakProgress(int progress) {
-                super.onSpeakProgress(progress);
-                mProgress = progress;
-            }
-
-            @Override
-            public void onAbort() {
-                super.onAbort();
-                if (isAbort){
-                    return;
-                }
-                //被打断的情况处理
-                mProgress = mProgress / 100;
-                if (0 < mProgress && mProgress < 1){
-                    speechVoice(str.substring((int) (str.length() * mProgress)), onSpeakCallBack);
-                }else{
-                    onSpeakCallBack.onSpeakEnd();
-                }
-            }
-        });
-    }
-
-    /**
-     * 是否正在说话
+     * 隐藏表情
      * @return
      */
-    public static boolean isSpeaking(){
-        return SpeechRobotApi.get().isTtsSpeaking();
+    public static Promise<Void, EmotionException> dismissExpressEmotion(){
+        return emotionManager.dismiss();
     }
 
     /**
-     * 机器人api提问
+     * 播放音乐
      * @param context
-     * @param question
-     * @param callBack
      */
-    public static void askQuestionToRobot(Context context, final String question, final OnRobotAnswerCallBack callBack){
-        //判断问答服务是否初始化成功
-        if (understander == null){
-            MapManager mapManager = XmlHelper.get().getIntentMapManager();
-            builder = new UnderstandOption.Builder();
-            String language = "zh-CN";
-            builder.setLanguage(language);
-            understander = (new CruzrLegacyUnderstanderFactory(context)).createUnderstander("zhujian", language, new AbstractNLUParamGenerator() {
-                @Override
-                public Bundle getBundle(String s) {
-                    Bundle bundle = new Bundle();
-                    switch (s) {
-                        case UnderstandConstant.SOURCE_EMOTIBOT:
-                            bundle.putString(UnderstandConstant.SOURCE_EMOTIBOT_APPID,
-                                    //填写正确的appid
-                                    RobotConstant.ROBOT_APPID);
-                            bundle.putString(UnderstandConstant.SOURCE_EMOTIBOT_USERID,
-                                    //"序列号：Cruzr.01.1234567,则填写1234567"
-                                    RobotConstant.ROBOT_NUM);
-                            bundle.putString(UnderstandConstant.SOURCE_EMOTIBOT_CITY,
-                                    //对应的城市
-                                    RobotConstant.ROBOT_CITY);
-                    }
-                    return bundle;
-                }
-            }, mapManager);
-        }
-        understander.understand(question,builder.build())
-                .done(new DoneCallback<LegacyUnderstandResult>() {
+    public static void playMusic(final Context context){
+        File file = new File("/sdcard/Music");
+        if (file.exists() && file.isDirectory()){
+            final String[] lists = file.list();
+            if (lists != null && lists.length != 0){
+                speak("我要开始唱歌啦，您要好好欣赏哦").done(new DoneCallback<Void>() {
                     @Override
-                    public void onDone(LegacyUnderstandResult legacyUnderstandResult) {
-                        // 1.主线程回调
-                        String result = legacyUnderstandResult.getFulfillment().getSpeech();
-                        // 替换名称为“小智”
-                        if (result.contains("小影")) {
-                            result = result.replace("小影", "小智");
-                        }
-                        LogUtils.e("机器人", result);
-                        //设置类型为闲聊通用
-                        AnswerBean.AnswerItem answerItem = new AnswerBean.AnswerItem();
-                        answerItem.viewType = ChatViewTypeConstant.VIEWTYPE_ROBOT;
-                        answerItem.Question = question;
-                        answerItem.orignalQuestion = question;
-                        answerItem.Answer = result;
-                        //回调出去
-                        callBack.onSuccess(answerItem);
+                    public void onDone(Void aVoid) {
+                        String fileName = lists[0];
+                        Intent intent = new Intent("com.ubt.cruzr.START_TASK");
+                        intent.putExtra("data",new String[]{"/sdcard/Music/" + fileName});
+                        context.sendBroadcast(intent);
                     }
-                }).fail(new FailCallback<UnderstandException>() {
+                });
+            }
+        }else{
+            speak("哎，我还没有音乐呢");
+        }
+    }
+
+    /**
+     * 根据名称获取标记点
+     * @param location
+     */
+    public static void getMarkerByName(final String location, final OnMarkerCallBack markerCallBack){
+        navigationManager.getCurrentNavMap().done(new DoneCallback<NavMap>() {
+
             @Override
-            public void onFail(UnderstandException e) {
-                //异常
-                LogUtils.e("机器人", "获取答案失败:" + e.toString());
-                AnswerBean.AnswerItem answerItem = new AnswerBean.AnswerItem();
-                answerItem.viewType = ChatViewTypeConstant.VIEWTYPE_ROBOT;
-                answerItem.Question = question;
-                answerItem.orignalQuestion = question;
-                answerItem.Answer = "您好，该问题已提交问题库，博物馆老师稍后会为您解答。";
-                callBack.onFailed(answerItem);
+            public void onDone(NavMap navMap) {
+                Marker decMarker = navigationManager.getMarkerByName(navMap, location);
+                if (decMarker != null){
+                    markerCallBack.setMsg("正在前往“" + location + "”,请跟紧我哦");
+                    markerCallBack.onSucess(decMarker);
+                }else{
+                    markerCallBack.setMsg("抱歉，我在地图上没有找到" + location + "这个位置点");
+                    speak("抱歉，我在地图上没有找到" + location + "这个位置点").done(new DoneCallback<Void>() {
+                        @Override
+                        public void onDone(Void aVoid) {
+                            markerCallBack.failed();
+                        }
+                    }).fail(new FailCallback<SynthesisException>() {
+                        @Override
+                        public void onFail(SynthesisException e) {
+                            markerCallBack.failed();
+                        }
+                    });
+                }
+            }
+        }).fail(new FailCallback<NavMapException>() {
+            @Override
+            public void onFail(NavMapException e) {
+                e.printStackTrace();
+                markerCallBack.setMsg("我还没有设置地图，请先给我设置地图");
+                speak("我还没有设置地图，请先给我设置地图").done(new DoneCallback<Void>() {
+                    @Override
+                    public void onDone(Void aVoid) {
+                        markerCallBack.failed();
+                    }
+                }).fail(new FailCallback<SynthesisException>() {
+                    @Override
+                    public void onFail(SynthesisException e) {
+                        markerCallBack.failed();
+                    }
+                });
             }
         });
     }
 
     /**
-     * 开始语音听写
-     * @param onASRCallBack
+     * 开始导航
+     * @param decMarker
      */
-    public static void startSpeechASR(final OnASRCallBack onASRCallBack){
-        SpeechRobotApi.get().startSpeechASR(new SpeechASRListener() {
+    public static void startNavigation(Marker decMarker, final OnNaviCallBack onNaviCallBack){
+        if (navigatePromise != null){
+            navigatePromise.cancel();
+        }
+        //导航到某地
+        navigatePromise = navigationManager.navigate(decMarker).done(new DoneCallback<Void>() {
             @Override
-            public void onBegin() {
-                //语音听写开始
-                onASRCallBack.onStart();
+            public void onDone(Void aVoid) {
+                navigatePromise = null;
+                //导航成功
+                onNaviCallBack.onSuccess();
             }
-
+        }).fail(new FailCallback<NavigationException>() {
             @Override
-            public void onEnd() {
-                //语音听写结束
-                onASRCallBack.onEnd();
-            }
-
-            @Override
-            public void onVolumeChanged(int i) {
-                //语音听写音量
-                onASRCallBack.onVolumeChanged(i);
-            }
-
-            @Override
-            public void onResult(String s, boolean b) {
-                //语音听写返回结果
-                onASRCallBack.onResult(s);
-            }
-
-            @Override
-            public void onError(int i) {
-                //错误回调
-                onASRCallBack.onError();
-            }
-
-            @Override
-            public void onIllegal() {
-                //出现非法情况回调
-                onASRCallBack.onError();
+            public void onFail(NavigationException e) {
+                navigatePromise = null;
+                //导航失败
+                onNaviCallBack.onFailed();
             }
         });
     }
 
     /**
-     * 停止语音听写
+     * 导航到某地
+     * @param location
      */
-    public static void stopSpeechASR(){
-        SpeechRobotApi.get().stopSpeechASR();
+    public static void goPoint(String location){
+        getMarkerByName(location, new OnMarkerCallBack() {
+            @Override
+            public void onSucess(Marker marker) {
+                startNavigation(marker, new OnNaviCallBack() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onFailed() {
+
+                    }
+                });
+            }
+
+            @Override
+            public void failed() {
+
+            }
+
+            @Override
+            public void setMsg(String msg) {
+
+            }
+        });
     }
 
     /**
-     * 是否开启唤醒
-     * @param type 语音:0 、虚拟按键:1、视觉唤醒:2 全部:3
-     * @param isAllow
+     * 取消导航
      */
-    public static void setEnableWake(int type, boolean isAllow){
-        SpeechRobotApi.get().enableWakeup(type, isAllow);
+    public static void stopNavigation(){
+        if (navigatePromise != null){
+            navigatePromise.cancel();
+        }
     }
 
 }

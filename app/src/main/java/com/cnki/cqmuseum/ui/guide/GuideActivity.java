@@ -21,7 +21,6 @@ import com.cnki.cqmuseum.manager.FloatButtonManager;
 import com.cnki.cqmuseum.manager.RobotManager;
 import com.cnki.cqmuseum.utils.GlideUtils;
 import com.cnki.cqmuseum.view.SelectDialog;
-import com.ubtechinc.cruzr.sdk.speech.SpeechRobotApi;
 
 import java.util.ArrayList;
 
@@ -113,12 +112,12 @@ public class GuideActivity extends BaseActivity<GuidePresenter> implements IGuid
         //初始化导航状态为待机
         naviState = NavigationStateConstant.STATE_STANDBY;
         //停止播报
-        RobotManager.stopSpeech();
+        RobotManager.stopSpeak();
         String guide = getIntent().getStringExtra(IntentActionConstant.NAVI_GUIDE);
         String location = getIntent().getStringExtra(IntentActionConstant.NAVI_LOCATION);
         if (TextUtils.isEmpty(location)){
             if (TextUtils.isEmpty(guide)){
-                RobotManager.speechVoice("请跟我说开始导航");
+                RobotManager.speak("请跟我说开始导航");
             }else{
                 startGuide();
             }

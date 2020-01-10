@@ -26,4 +26,6 @@ public class IntentActionConstant {
     public static final String NAVI_LOCATION = "location";
     //开始导览
     public static final String NAVI_GUIDE = "guide";
+    //机器人答案
+    public static final String ROBOT_MSG = "robotmsg";
 }

@@ -125,9 +125,9 @@ public class CollectionDialog extends Dialog {
             @Override
             public void onPageSelected(int i) {
                 LogUtils.e("onPageSelected:" + i);
-                RobotManager.stopSpeech();
+                RobotManager.stopSpeak();
                 if (!TextUtils.isEmpty(answerItem.kNodeItems.get(i).dataItems.get(0).fieldValue.introduce)){
-                    RobotManager.speechVoice(answerItem.kNodeItems.get(i).dataItems.get(0).fieldValue.introduce);
+                    RobotManager.speak(answerItem.kNodeItems.get(i).dataItems.get(0).fieldValue.introduce);
                 }
                 if (i == 0){
                     mImageViewLeft.setVisibility(View.GONE);
@@ -147,14 +147,14 @@ public class CollectionDialog extends Dialog {
             }
         });
         if (!TextUtils.isEmpty(answerItem.kNodeItems.get(0).dataItems.get(0).fieldValue.introduce)){
-            RobotManager.speechVoice(answerItem.kNodeItems.get(0).dataItems.get(0).fieldValue.introduce);
+            RobotManager.speak(answerItem.kNodeItems.get(0).dataItems.get(0).fieldValue.introduce);
         }
     }
 
     @Override
     public void dismiss() {
         super.dismiss();
-        RobotManager.stopSpeech();
+        RobotManager.stopSpeak();
         if (originalListen){
             RobotManager.isListen = true;
         }

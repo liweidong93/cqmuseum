@@ -132,7 +132,7 @@ public class CollectDetailActivity extends BaseActivity<CollectionDetailPresente
             mTextViewName.setText(collectionItem.name);
             GlideUtils.loadPic(mContext, UrlConstant.URL_CNKI_PIC + collectionItem.image, mImageViewPic);
             mTextViewIntroduce.setText(collectionItem.introduce);
-            RobotManager.speechVoice(collectionItem.introduce);
+            RobotManager.speak(collectionItem.introduce);
             if (!TextUtils.isEmpty(collectionItem.place)){
                 mTextViewProduce.setText("产地：" + collectionItem.place);
             }else{
@@ -195,6 +195,6 @@ public class CollectDetailActivity extends BaseActivity<CollectionDetailPresente
     @Override
     public void finish() {
         super.finish();
-        RobotManager.stopSpeech();
+        RobotManager.stopSpeak();
     }
 }

@@ -35,11 +35,9 @@ public class ChatPresenter extends BasePresenterImpl<IChatView> {
      * 发送问题
      * @param question
      */
-    public void sendQuestion(final String question){
+    public void sendQuestion(final String question, final String robotMsg){
         addDisposable(CnkiApi.getInstance().getCnkiAnswer(question), new BaseCnkiObserver() {
 
-            private volatile boolean isCnkiFinish;
-            private volatile AnswerBean.AnswerItem mRobotAnswerItem;
             @Override
             public void onSuccess(ArrayList<AnswerBean> answerBeans) {
                 AnswerBean.AnswerItem answerItem = mModle.getViewType(answerBeans, false);
@@ -52,17 +50,7 @@ public class ChatPresenter extends BasePresenterImpl<IChatView> {
             protected void onStart() {
                 super.onStart();
                 //发送问题前先停止播报
-                RobotManager.stopSpeech();
-                //同时请求机器人答案
-                isCnkiFinish = false;
-                mRobotAnswerItem = null;
-                askRobotQuestion(question, new OnRobotQuestionCallBack() {
-                    @Override
-                    public void onUpdateUI(String question, AnswerBean.AnswerItem answerItem) {
-                        mRobotAnswerItem = answerItem;
-                        updateRobotAndCnki(question, isCnkiFinish, mRobotAnswerItem);
-                    }
-                });
+                RobotManager.stopSpeak();
             }
 
             @Override
@@ -74,8 +62,7 @@ public class ChatPresenter extends BasePresenterImpl<IChatView> {
                 super.onFailed();
                 //获取机器人api答案
                 LogUtils.e("知网获取失败   获取机器人答案");
-                isCnkiFinish = true;
-                updateRobotAndCnki(question, isCnkiFinish, mRobotAnswerItem);
+                handRobotAnswer(question, robotMsg);
             }
 
             @Override
@@ -83,41 +70,28 @@ public class ChatPresenter extends BasePresenterImpl<IChatView> {
                 super.onError(e);
                 //获取机器人api答案
                 LogUtils.e("知网获取失败   获取机器人答案");
-                isCnkiFinish = true;
-                updateRobotAndCnki(question, isCnkiFinish, mRobotAnswerItem);
+                handRobotAnswer(question, robotMsg);
             }
         });
     }
 
     /**
-     * 更新cnki机器人答案
+     * 处理机器人回答
      * @param question
-     * @param isCnkiFinish
-     * @param mRobotAnswerItem
+     * @param robotMsg
      */
-    private void updateRobotAndCnki(String question, boolean isCnkiFinish, AnswerBean.AnswerItem mRobotAnswerItem){
-        if (isCnkiFinish && mRobotAnswerItem != null){
-            mView.notifyChatData(question, mRobotAnswerItem);
+    private void handRobotAnswer(String question, String robotMsg){
+        //设置类型为闲聊通用
+        AnswerBean.AnswerItem answerItem = new AnswerBean.AnswerItem();
+        answerItem.viewType = ChatViewTypeConstant.VIEWTYPE_ROBOT;
+        answerItem.Question = question;
+        answerItem.orignalQuestion = question;
+        if (TextUtils.isEmpty(robotMsg)){
+            answerItem.Answer = "我正在学习中，稍后博物馆老师会为您解答！";
+        }else{
+            answerItem.Answer = robotMsg;
         }
-    }
-
-
-    /**
-     * 机器人提问
-     * @param question
-     */
-    public void askRobotQuestion(final String question, final OnRobotQuestionCallBack callBack){
-        RobotManager.askQuestionToRobot(mContext, question, new OnRobotAnswerCallBack() {
-            @Override
-            public void onSuccess(AnswerBean.AnswerItem successAnswer) {
-                callBack.onUpdateUI(question, successAnswer);
-            }
-
-            @Override
-            public void onFailed(AnswerBean.AnswerItem failAnswer) {
-                callBack.onUpdateUI(question, failAnswer);
-            }
-        });
+        mView.notifyChatData(question, answerItem);
     }
 
     /**
@@ -127,13 +101,13 @@ public class ChatPresenter extends BasePresenterImpl<IChatView> {
     public void speechResult(AnswerBean.AnswerItem answerItem){
         switch (answerItem.viewType){
             case ChatViewTypeConstant.VIEWTYPE_COLLECTION:
-                RobotManager.stopSpeech();
+                RobotManager.stopSpeak();
                 break;
             case ChatViewTypeConstant.VIEWTYPE_PANDA_KNOWLWDGE:
                 if (answerItem.kNodeItems != null && answerItem.kNodeItems.size() != 0 && answerItem.kNodeItems.get(0).dataItems != null
                         && answerItem.kNodeItems.get(0).dataItems.size() != 0 && answerItem.kNodeItems.get(0).dataItems.get(0).fieldValue != null){
-                    RobotManager.stopSpeech();
-                    RobotManager.speechVoice(answerItem.kNodeItems.get(0).dataItems.get(0).fieldValue.introduce);
+                    RobotManager.stopSpeak();
+                    RobotManager.speak(answerItem.kNodeItems.get(0).dataItems.get(0).fieldValue.introduce);
                 }
                 break;
             default:
@@ -141,13 +115,10 @@ public class ChatPresenter extends BasePresenterImpl<IChatView> {
                 if (!TextUtils.isEmpty(answerItem.Answer)){
                     String answer = answerItem.Answer;
                     answer = HtmlUtils.removeHtml(answer);
-                    RobotManager.speechVoice(answer);
+                    RobotManager.speak(answer);
                 }
                 break;
         }
     }
 
-    public interface OnRobotQuestionCallBack{
-        void onUpdateUI(String question, AnswerBean.AnswerItem successAnswer);
-    }
 }

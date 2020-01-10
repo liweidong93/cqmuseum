@@ -13,6 +13,9 @@ import com.cnki.cqmuseum.bean.SpeechServer;
 import com.cnki.cqmuseum.interf.OnSpeakCallBack;
 import com.cnki.cqmuseum.manager.FloatButtonManager;
 import com.cnki.cqmuseum.manager.RobotManager;
+import com.ubtrobot.async.DoneCallback;
+import com.ubtrobot.async.FailCallback;
+import com.ubtrobot.speech.SynthesisException;
 
 import java.util.ArrayList;
 
@@ -88,9 +91,14 @@ public class SpeechServerActivity extends BaseActivity<SpeechServerPresenter> im
      * @param voice
      */
     public void speech(final String voice){
-        RobotManager.speechVoice(voice, new OnSpeakCallBack() {
+        RobotManager.speak(voice).done(new DoneCallback<Void>() {
             @Override
-            public void onSpeakEnd() {
+            public void onDone(Void aVoid) {
+                speech(voice);
+            }
+        }).fail(new FailCallback<SynthesisException>() {
+            @Override
+            public void onFail(SynthesisException e) {
                 speech(voice);
             }
         });
@@ -99,9 +107,8 @@ public class SpeechServerActivity extends BaseActivity<SpeechServerPresenter> im
     @Override
     public void finish() {
         super.finish();
-//        FloatButtonManager.getInstance().hide();
         if (RobotManager.isSpeaking()){
-            RobotManager.stopSpeech();
+            RobotManager.stopSpeak();
         }
     }
 }

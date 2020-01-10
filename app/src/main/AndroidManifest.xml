@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <!-- 系统级悬浮窗权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="com.ubtrobot.permission.ROBOT" />
 
     <application
         android:name=".application.HomeApplication"
@@ -90,19 +91,14 @@
                 android:resource="@xml/download_filepath" />
         </provider>
 
-        <!-- 注册机器人 -->
-        <meta-data
-            android:name="cruiser_appid"
-            android:value="9005" />
+        <uses-library
+            android:name="com.ubtrobot.rosa"
+            android:required="true"/>
 
         <service
-            android:name="com.ubtechinc.cruzr.sdk.speech.SpeechService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.cnki.cqmuseum.Cruiser_Service" />
-            </intent-filter>
-        </service>
+            android:name="com.ubtrobot.app.Bootstrap"
+            android:exported="true" />
+
 
     </application>
 

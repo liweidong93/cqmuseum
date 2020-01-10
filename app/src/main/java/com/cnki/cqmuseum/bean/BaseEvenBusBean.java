@@ -9,6 +9,7 @@ public class BaseEvenBusBean<T> {
 
     private String tag;//标志
     private T object;
+    private String robotMsg;//机器人默认语料
 
     public BaseEvenBusBean(String tag){
         this.tag = tag;
@@ -28,5 +29,13 @@ public class BaseEvenBusBean<T> {
 
     public void setObject(T object) {
         this.object = object;
+    }
+
+    public String getRobotMsg() {
+        return robotMsg;
+    }
+
+    public void setRobotMsg(String robotMsg) {
+        this.robotMsg = robotMsg;
     }
 }

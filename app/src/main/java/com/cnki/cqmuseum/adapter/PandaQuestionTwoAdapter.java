@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.cnki.cqmuseum.R;
 import com.cnki.cqmuseum.bean.PandaBean;
+import com.cnki.cqmuseum.manager.RobotManager;
 import com.cnki.cqmuseum.ui.chat.ChatPresenter;
 
 import java.util.ArrayList;
@@ -75,7 +76,7 @@ public class PandaQuestionTwoAdapter extends RecyclerView.Adapter<RecyclerView.V
                     //直接问答
                     int pointIndex = secondItem.secondName.indexOf(".");
                     if (pointIndex != -1){
-                        mPresenter.sendQuestion(secondItem.secondName.substring(pointIndex + 1));
+                        RobotManager.understantSpeak(mContext,secondItem.secondName.substring(pointIndex + 1));
                     }
                 }
 

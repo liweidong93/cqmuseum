@@ -29,8 +29,9 @@ public class HomePresenter extends BasePresenterImpl<IHomeView>{
     @Override
     public void start() {
         super.start();
-        //初始化cruze机器人设置
-        RobotManager.setRobotSetting(mContext);
+        //打开机器人识别通道
+        RobotManager.speak("您好，很高兴为您服务！");
+        RobotManager.recognize(mContext);
         //检查读写权限，6.0以上系统使用
         checkPermission();
     }
