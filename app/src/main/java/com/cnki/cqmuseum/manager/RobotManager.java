@@ -15,6 +15,7 @@ import com.cnki.cqmuseum.interf.OnMarkerCallBack;
 import com.cnki.cqmuseum.interf.OnNaviCallBack;
 import com.cnki.cqmuseum.ui.chat.ChatActivity;
 import com.cnki.cqmuseum.ui.collection.CollectionActivity;
+import com.cnki.cqmuseum.ui.guide.GuideActivity;
 import com.cnki.cqmuseum.ui.navigation.NavigationActivity;
 import com.cnki.cqmuseum.utils.LogUtils;
 import com.ubtrobot.Robot;
@@ -165,6 +166,20 @@ public class RobotManager {
                             //停止说话
                             stopSpeak();
                             speak("好的，我保持安静");
+                        }
+                        return;
+                    }
+                    //开始导览
+                    if (recognitionProgress.getTextResult().equals("开始导航") || ( (recognitionProgress.getTextResult().contains("游览") || recognitionProgress.getTextResult().contains("参观")) && recognitionProgress.getTextResult().contains("带"))){
+                        if ("com.cnki.cqmuseum.ui.guide.GuideActivity".equals(topActivity)){
+                            BaseEvenBusBean<String> naviEvenBus = new BaseEvenBusBean<>(EvenBusConstant.EVENBUS_STARTNAVI);
+                            EventBus.getDefault().post(naviEvenBus);
+                        }else{
+                            //先跳转再开始导览
+                            Intent intent = new Intent(context, GuideActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra(IntentActionConstant.NAVI_GUIDE,"start");
+                            context.startActivity(intent);
                         }
                         return;
                     }
