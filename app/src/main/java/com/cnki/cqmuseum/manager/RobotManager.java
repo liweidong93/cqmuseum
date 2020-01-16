@@ -241,7 +241,7 @@ public class RobotManager {
      * @param context
      * @param inputText
      */
-    public static void understantSpeak(final Context context, final String inputText){
+    private static void understantSpeak(final Context context, final String inputText){
         final Promise<UnderstandingResult, UnderstandingException> understand = speechManager.understand((inputText.startsWith("今天天气") || inputText.startsWith("明天天气"))? RobotConstant.ROBOT_CITY + inputText : inputText);
         understand.done(new DoneCallback<UnderstandingResult>() {
             @Override
@@ -350,6 +350,16 @@ public class RobotManager {
                 }
             }
         });
+    }
+
+    /**
+     * 语义理解接口，通过示例问题点击
+     * @param inputText
+     * @return
+     */
+    public static Promise<UnderstandingResult, UnderstandingException> understantSpeakByClick(String inputText){
+        final Promise<UnderstandingResult, UnderstandingException> understand = speechManager.understand((inputText.startsWith("今天天气") || inputText.startsWith("明天天气"))? RobotConstant.ROBOT_CITY + inputText : inputText);
+        return understand;
     }
 
     /**

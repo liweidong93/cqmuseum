@@ -42,7 +42,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         mHolder.mTextViewQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RobotManager.understantSpeak(mContext, mSuggestions[i]);
+                mPresenter.clickSendQuestion(mSuggestions[i]);
             }
         });
     }

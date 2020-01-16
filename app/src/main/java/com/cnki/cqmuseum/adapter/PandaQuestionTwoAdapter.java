@@ -76,7 +76,7 @@ public class PandaQuestionTwoAdapter extends RecyclerView.Adapter<RecyclerView.V
                     //直接问答
                     int pointIndex = secondItem.secondName.indexOf(".");
                     if (pointIndex != -1){
-                        RobotManager.understantSpeak(mContext,secondItem.secondName.substring(pointIndex + 1));
+                        mPresenter.clickSendQuestion(secondItem.secondName.substring(pointIndex + 1));
                     }
                 }
 

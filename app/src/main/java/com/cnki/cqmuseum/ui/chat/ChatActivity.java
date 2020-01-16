@@ -129,7 +129,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements IChatVi
                     Toast.makeText(ChatActivity.this, "请输入问题", Toast.LENGTH_LONG).show();
                     return;
                 }
-                RobotManager.understantSpeak(ChatActivity.this, question);
+                mPresenter.clickSendQuestion(question);
                 KeyboardUtils.hideKeyboard(mEditTextInput);
                 mEditTextInput.setText("");
             }
@@ -578,7 +578,7 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements IChatVi
             case R.id.tv_main_title6:
             case R.id.tv_main_title7:
                 String question = ((TextView) view).getText().toString();
-                RobotManager.understantSpeak(ChatActivity.this, question);
+                mPresenter.clickSendQuestion(question);
                 break;
         }
     }

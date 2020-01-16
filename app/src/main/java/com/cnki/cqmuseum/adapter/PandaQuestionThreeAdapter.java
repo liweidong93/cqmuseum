@@ -43,7 +43,7 @@ public class PandaQuestionThreeAdapter extends RecyclerView.Adapter<RecyclerView
         mHolder.mTextViewName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RobotManager.understantSpeak(mContext,threeNames.get(i));
+                mPresenter.clickSendQuestion(threeNames.get(i));
             }
         });
     }

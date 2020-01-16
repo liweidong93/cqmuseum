@@ -18,4 +18,5 @@ public interface ICollectionView extends BaseView {
     void noEmpty();
 
     void onFinish();
+
 }

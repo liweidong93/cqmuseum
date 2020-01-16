@@ -119,6 +119,7 @@ public class CollectionActivity extends BaseActivity<CollectionPresenter> implem
                     mTypeAdapter.notifyDataSetChanged();
                 }
                 if (!TextUtils.isEmpty(editable.toString().trim())){
+                    curPage = 0;
                     mCollectionAdapter.clear();
 //                    mCollectionAdapter.notifyDataSetChanged();
                     mPresenter.askQuestion(editable.toString().trim());
