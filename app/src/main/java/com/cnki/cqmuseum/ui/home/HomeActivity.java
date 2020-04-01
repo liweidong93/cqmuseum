@@ -113,6 +113,20 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements IHomeVi
                 startActivity(new Intent(HomeActivity.this, SpeechServerActivity.class));
             }
         });
+        View viewSwitch = findViewById(R.id.view_home_switch);
+        viewSwitch.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (RobotManager.isListen){
+                    RobotManager.isListen = false;
+                    RobotManager.speechVoice("语音接收已关闭");
+                }else{
+                    RobotManager.isListen = true;
+                    RobotManager.speechVoice("语音接收已开启");
+                }
+                return false;
+            }
+        });
     }
 
     @Override
