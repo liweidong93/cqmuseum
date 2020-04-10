@@ -91,9 +91,10 @@
                 android:resource="@xml/download_filepath" />
         </provider>
 
-        <uses-library
-            android:name="com.ubtrobot.rosa"
-            android:required="true"/>
+        <!--新版sdk需要开启-->
+        <!--<uses-library-->
+            <!--android:name="com.ubtrobot.rosa"-->
+            <!--android:required="true"/>-->
 
         <service
             android:name="com.ubtrobot.app.Bootstrap"

@@ -86,8 +86,9 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
 
     //机器人库
-//    implementation files('rosa-libs/rosa-2.5.2.jar')
-        compileOnly files('rosa-libs/rosa-2.5.2.jar')
+    implementation files('rosa-libs/rosa-2.5.2.jar')
+//        新版机器人sdk需要开启，因为系统有此类库
+//        compileOnly files('rosa-libs/rosa-2.5.2.jar')
 
     //图片库
     implementation 'com.github.bumptech.glide:glide:4.9.0'
