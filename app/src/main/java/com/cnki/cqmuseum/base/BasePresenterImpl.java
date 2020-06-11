@@ -2,6 +2,7 @@ package com.cnki.cqmuseum.base;
 
 import android.content.Context;
 
+import com.bumptech.glide.Glide;
 import com.cnki.cqmuseum.utils.LogUtils;
 
 import io.reactivex.Observable;

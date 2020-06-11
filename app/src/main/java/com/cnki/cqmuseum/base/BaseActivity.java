@@ -1,5 +1,6 @@
 package com.cnki.cqmuseum.base;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -7,10 +8,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.cnki.cqmuseum.bean.BaseEvenBusBean;
 import com.cnki.cqmuseum.constant.RobotConstant;
 import com.cnki.cqmuseum.manager.ActivityViewManager;
+import com.cnki.cqmuseum.utils.StatuBarUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -29,7 +33,8 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-//        StatuBarUtils.setTransluentThemeStyle(getWindow());
+//        StatuBarUtils.setFitsSystemWindows(this, true);
+        StatuBarUtils.setStatusBarFullTransparent(this);
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
         mContext = this;
@@ -39,6 +44,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         mPresenter = initPresenter();//初始化presenter
         mPresenter.setContext(this);//设置环境
         initView();
+        paddingStatusBar();
         initData();
         mPresenter.start();//调用persenter的开始
     }
@@ -136,5 +142,10 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
             mPresenter.detach();
             mPresenter = null;
         }
+    }
+
+    public void paddingStatusBar(){
+        View rootView = ((ViewGroup)findViewById(android.R.id.content)).getChildAt(0);
+        rootView.setPadding(0, StatuBarUtils.getStatusBarHeight(this), 0, 0);
     }
 }

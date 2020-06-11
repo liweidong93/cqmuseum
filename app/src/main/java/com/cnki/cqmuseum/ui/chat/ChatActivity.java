@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -31,6 +32,7 @@ import com.cnki.cqmuseum.manager.RobotManager;
 import com.cnki.cqmuseum.server.api.MuseumApi;
 import com.cnki.cqmuseum.utils.KeyboardUtils;
 import com.cnki.cqmuseum.utils.RandomUtils;
+import com.cnki.cqmuseum.utils.StatuBarUtils;
 import com.cnki.cqmuseum.view.CollectionDialog;
 
 import java.util.ArrayList;
@@ -730,5 +732,11 @@ public class ChatActivity extends BaseActivity<ChatPresenter> implements IChatVi
             mTimer.cancel();
             mTimer = null;
         }
+    }
+
+    @Override
+    public void paddingStatusBar() {
+        mRelativeLayoutNormal.setPadding(0, StatuBarUtils.getStatusBarHeight(this), 0 , 0);
+        findViewById(R.id.rl_main_title).setPadding(0, StatuBarUtils.getStatusBarHeight(this), 0 , 0);
     }
 }

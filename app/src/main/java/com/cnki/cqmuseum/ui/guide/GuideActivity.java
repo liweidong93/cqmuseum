@@ -20,6 +20,7 @@ import com.cnki.cqmuseum.interf.OnGuideListener;
 import com.cnki.cqmuseum.manager.FloatButtonManager;
 import com.cnki.cqmuseum.manager.RobotManager;
 import com.cnki.cqmuseum.utils.GlideUtils;
+import com.cnki.cqmuseum.utils.StatuBarUtils;
 import com.cnki.cqmuseum.view.SelectDialog;
 import com.ubtechinc.cruzr.sdk.speech.SpeechRobotApi;
 
@@ -318,5 +319,11 @@ public class GuideActivity extends BaseActivity<GuidePresenter> implements IGuid
     @Override
     public void finishGuide() {
 
+    }
+
+    @Override
+    public void paddingStatusBar() {
+        findViewById(R.id.rl_guide_stub1).setPadding(0, StatuBarUtils.getStatusBarHeight(this), 0 , 0);
+        findViewById(R.id.rl_guide_stub2).setPadding(0, StatuBarUtils.getStatusBarHeight(this), 0 , 0);
     }
 }

@@ -6,6 +6,7 @@
     android:orientation="horizontal">
     
     <RelativeLayout
+        android:id="@+id/rl_collection_stub1"
         android:layout_width="570px"
         android:layout_height="match_parent"
         android:background="@mipmap/collection_left">
@@ -109,6 +110,7 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/ll_collection_stub2"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"

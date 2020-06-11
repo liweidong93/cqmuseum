@@ -26,6 +26,7 @@ import com.cnki.cqmuseum.constant.IntentActionConstant;
 import com.cnki.cqmuseum.manager.FloatButtonManager;
 import com.cnki.cqmuseum.ui.home.HomeActivity;
 import com.cnki.cqmuseum.utils.LogUtils;
+import com.cnki.cqmuseum.utils.StatuBarUtils;
 import com.cnki.cqmuseum.utils.ToastUtils;
 import com.cnki.cqmuseum.view.VolumeDialogUtils;
 import com.jude.easyrecyclerview.EasyRecyclerView;
@@ -301,5 +302,11 @@ public class CollectionActivity extends BaseActivity<CollectionPresenter> implem
     public void finish() {
         super.finish();
         FloatButtonManager.getInstance().hide();
+    }
+
+    @Override
+    public void paddingStatusBar() {
+        findViewById(R.id.rl_collection_stub1).setPadding(0, StatuBarUtils.getStatusBarHeight(this), 0 , 0);
+        findViewById(R.id.ll_collection_stub2).setPadding(0, StatuBarUtils.getStatusBarHeight(this), 0 , 0);
     }
 }
