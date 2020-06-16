@@ -35,6 +35,7 @@ import com.ubtrobot.motion.ActionUris;
 import com.ubtrobot.motion.MotionManager;
 import com.ubtrobot.motion.PerformingException;
 import com.ubtrobot.motion.PerformingProgress;
+import com.ubtrobot.navigation.Location;
 import com.ubtrobot.navigation.Marker;
 import com.ubtrobot.navigation.NavMap;
 import com.ubtrobot.navigation.NavMapException;
@@ -83,7 +84,7 @@ public class RobotManager {
     private static String topActivity = "";
     public static boolean isListen = true;//机器人是否接受语音问题
     private static ProgressivePromise<Void, SynthesisException, SynthesisProgress> speakPromise;
-    private static NavigationManager navigationManager;
+    private static NavigationManagerCompat navigationManager;
     private static ProgressivePromise<Void, NavigationException, NavigationProgress> navigatePromise;
 
     /**
@@ -103,7 +104,7 @@ public class RobotManager {
         emotionManager = Robot.globalContext()
                 .getSystemService(EmotionManager.SERVICE);
         //导航服务
-        navigationManager = Robot.globalContext().getSystemService(NavigationManager.SERVICE);
+        navigationManager = new NavigationManagerCompat(Robot.globalContext());
     }
 
     /**
@@ -519,8 +520,12 @@ public class RobotManager {
         if (navigatePromise != null){
             navigatePromise.cancel();
         }
+        Location location = new Location.Builder(decMarker.getPosition())
+                .setRotation(decMarker.getRotation())
+                .setZ(decMarker.getZ())
+                .build();
         //导航到某地
-        navigatePromise = navigationManager.navigate(decMarker).done(new DoneCallback<Void>() {
+        navigatePromise = navigationManager.navigate(location).done(new DoneCallback<Void>() {
             @Override
             public void onDone(Void aVoid) {
                 navigatePromise = null;
