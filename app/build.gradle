@@ -6,8 +6,8 @@ android {
         applicationId "com.cnki.cqmuseum"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 20
+        versionName "2.0"
         //方法超过65535
         multiDexEnabled = true
     }
@@ -45,7 +45,7 @@ android {
 
     repositories {
         flatDir {
-            dirs 'rosa-libs'
+            dirs 'cruzr-libs'
         }
     }
 
@@ -86,9 +86,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
 
     //机器人库
-//    implementation files('rosa-libs/rosa-2.5.2.jar')
-//        新版机器人sdk需要开启，因为系统有此类库
-        compileOnly files('rosa-libs/rosa-2.5.2.jar')
+    compileOnly files('cruzr-libs/cruzr-sdk-2.7.0.jar')
+
 
     //图片库
     implementation 'com.github.bumptech.glide:glide:4.9.0'

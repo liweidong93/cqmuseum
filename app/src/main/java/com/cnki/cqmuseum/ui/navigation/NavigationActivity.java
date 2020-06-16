@@ -21,6 +21,7 @@ public class NavigationActivity extends BaseActivity<NavigationPresenter> implem
     private String location;
     private boolean isOriginalListen;
     private TextView mTextViewTip;
+    private String id;
 
     @Override
     public NavigationPresenter initPresenter() {

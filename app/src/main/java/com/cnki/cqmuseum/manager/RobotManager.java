@@ -39,6 +39,7 @@ import com.ubtrobot.navigation.Marker;
 import com.ubtrobot.navigation.NavMap;
 import com.ubtrobot.navigation.NavMapException;
 import com.ubtrobot.navigation.NavigationException;
+import com.ubtrobot.navigation.NavigationManager;
 import com.ubtrobot.navigation.NavigationProgress;
 import com.ubtrobot.orchestration.OrchestrationManager;
 import com.ubtrobot.orchestration.OrchestrationUris;
@@ -82,7 +83,7 @@ public class RobotManager {
     private static String topActivity = "";
     public static boolean isListen = true;//机器人是否接受语音问题
     private static ProgressivePromise<Void, SynthesisException, SynthesisProgress> speakPromise;
-    private static NavigationManagerCompat navigationManager;
+    private static NavigationManager navigationManager;
     private static ProgressivePromise<Void, NavigationException, NavigationProgress> navigatePromise;
 
     /**
@@ -102,7 +103,7 @@ public class RobotManager {
         emotionManager = Robot.globalContext()
                 .getSystemService(EmotionManager.SERVICE);
         //导航服务
-        navigationManager = new NavigationManagerCompat(Robot.globalContext());
+        navigationManager = Robot.globalContext().getSystemService(NavigationManager.SERVICE);
     }
 
     /**
@@ -215,7 +216,7 @@ public class RobotManager {
                         if (isListen){
                             getMarkerName(recognitionProgress.getTextResult(), new OnLocationCallBack() {
                                 @Override
-                                public void onSuccess(String markerName) {
+                                public void onSuccess(String markerName, String id) {
                                     //跳转到导航页面
                                     Intent intent = new Intent(context, NavigationActivity.class);
                                     intent.putExtra(IntentActionConstant.NAVI_LOCATION, markerName);
@@ -430,25 +431,36 @@ public class RobotManager {
         navigationManager.getCurrentNavMap().done(new DoneCallback<NavMap>() {
 
             @Override
-            public void onDone(NavMap navMap) {
-                Marker decMarker = navigationManager.getMarkerByName(navMap, location);
-                if (decMarker != null){
-                    markerCallBack.setMsg("正在前往“" + location + "”,请跟紧我哦");
-                    markerCallBack.onSucess(decMarker);
-                }else{
-                    markerCallBack.setMsg("抱歉，我在地图上没有找到" + location + "这个位置点");
-                    speak("抱歉，我在地图上没有找到" + location + "这个位置点").done(new DoneCallback<Void>() {
-                        @Override
-                        public void onDone(Void aVoid) {
-                            markerCallBack.failed();
+            public void onDone(final NavMap navMap) {
+                getMarkerName(location, new OnLocationCallBack() {
+                    @Override
+                    public void onSuccess(String markerName, String id) {
+                        //                Marker decMarker = navigationManager.getMarkerByName(navMap, location);
+                        Marker decMarker = navMap.getMarker(id);
+                        if (decMarker != null){
+                            markerCallBack.setMsg("正在前往“" + location + "”,请跟紧我哦");
+                            markerCallBack.onSucess(decMarker);
+                        }else{
+                            markerCallBack.setMsg("抱歉，我在地图上没有找到" + location + "这个位置点");
+                            speak("抱歉，我在地图上没有找到" + location + "这个位置点").done(new DoneCallback<Void>() {
+                                @Override
+                                public void onDone(Void aVoid) {
+                                    markerCallBack.failed();
+                                }
+                            }).fail(new FailCallback<SynthesisException>() {
+                                @Override
+                                public void onFail(SynthesisException e) {
+                                    markerCallBack.failed();
+                                }
+                            });
                         }
-                    }).fail(new FailCallback<SynthesisException>() {
-                        @Override
-                        public void onFail(SynthesisException e) {
-                            markerCallBack.failed();
-                        }
-                    });
-                }
+                    }
+
+                    @Override
+                    public void onFailed() {
+
+                    }
+                });
             }
         }).fail(new FailCallback<NavMapException>() {
             @Override
@@ -483,7 +495,7 @@ public class RobotManager {
                 for (int i = 0; i < markerList.size(); i++) {
                     // if (pointName.contains(allMapPointModelByMapName.get(i).getPointName())) { // 原来的方法，用文字来判断
                     if (TextStyleUtils.toPinyin(pointName).contains(TextStyleUtils.toPinyin(markerList.get(i).getTitle()))) {
-                        callBack.onSuccess(markerList.get(i).getTitle());
+                        callBack.onSuccess(markerList.get(i).getTitle(), markerList.get(i).getId());
                         return;
                     }
                 }
@@ -530,7 +542,7 @@ public class RobotManager {
      * @param location
      */
     public static void goPoint(String location){
-        getMarkerByName(location, new OnMarkerCallBack() {
+        getMarkerByName(location,new OnMarkerCallBack() {
             @Override
             public void onSucess(Marker marker) {
                 startNavigation(marker, new OnNaviCallBack() {

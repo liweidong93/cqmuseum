@@ -96,6 +96,7 @@
             android:name="com.ubtrobot.rosa"
             android:required="true"/>
 
+
         <service
             android:name="com.ubtrobot.app.Bootstrap"
             android:exported="true" />
