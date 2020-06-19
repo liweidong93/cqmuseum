@@ -166,6 +166,7 @@ public class RobotManager {
                 if (!TextUtils.isEmpty(recognitionProgress.getTextResult())){
                     LogUtils.e("robot","机器人识别结果:" + recognitionProgress.getTextResult());
                     topActivity = ActivityViewManager.getInstance().getTopActivity(context);
+                    //停止说话逻辑
                     if (isSpeaking()){
                         if ((isXZH(recognitionProgress.getTextResult()) && recognitionProgress.getTextResult().contains("别说")) || (isXZH(recognitionProgress.getTextResult()) && recognitionProgress.getTextResult().contains("闭嘴"))
                                 || isXZH(recognitionProgress.getTextResult()) && (recognitionProgress.getTextResult().contains("不要") || recognitionProgress.getTextResult().contains("停止")) && recognitionProgress.getTextResult().contains("说")){

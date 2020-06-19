@@ -11,8 +11,7 @@
     <uses-permission
         android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-    <!-- 系统级悬浮窗权限 -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" /> <!-- 系统级悬浮窗权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="com.ubtrobot.permission.ROBOT" />
 
@@ -68,8 +67,8 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"
             android:screenOrientation="landscape" />
-
-        <activity android:name=".ui.navigation.NavigationActivity"
+        <activity
+            android:name=".ui.navigation.NavigationActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"
             android:screenOrientation="landscape" />
@@ -89,19 +88,14 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/download_filepath" />
-        </provider>
-
-        <!--新版sdk需要开启-->
+        </provider> <!-- 新版sdk需要开启 -->
         <uses-library
             android:name="com.ubtrobot.rosa"
-            android:required="true"/>
-
+            android:required="true" />
 
         <service
             android:name="com.ubtrobot.app.Bootstrap"
             android:exported="true" />
-
-
     </application>
 
 </manifest>

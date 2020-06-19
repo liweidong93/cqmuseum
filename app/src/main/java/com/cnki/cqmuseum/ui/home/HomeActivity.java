@@ -208,6 +208,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements IHomeVi
                 intent.putExtra(IntentActionConstant.ACTIONTYPE_PANDAFROMTYPE, IntentActionConstant.PANDATYPE_GUIDE);
                 break;
             case R.id.iv_home_speakserver://讲解服务的点击事件
+                intent = new Intent(HomeActivity.this, SpeechServerActivity.class);
                 break;
         }
         if (intent != null){
