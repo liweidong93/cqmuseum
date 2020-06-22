@@ -45,6 +45,7 @@ import com.cnki.cqmuseum.utils.RandomUtils;
 import com.cnki.cqmuseum.utils.TextStyleUtils;
 import com.cnki.cqmuseum.view.PasswordDialog;
 import com.cnki.cqmuseum.view.VolumeDialogUtils;
+import com.ubtechinc.cruzr.assistant.sdk.AssistantManager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -184,6 +185,13 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements IHomeVi
     protected void onStop() {
         super.onStop();
         isNeedStop = true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //隐藏语音助手
+        AssistantManager.get(getApplicationContext()).hideAssistant();
     }
 
     /**

@@ -58,7 +58,8 @@ class NavMapConvert {
      * @param scale   navMap.getScale()
      * @return The 'MarkerList' Of Coordinates For Actual Use
      */
-    private static List<Marker> displayToActual(List<Marker> markers, float originX, float originY, float scale) {
+    private static List<Marker>
+    displayToActual(List<Marker> markers, float originX, float originY, float scale) {
         LinkedList<Marker> markerList = new LinkedList<>();
         for (Marker marker : markers) {
             markerList.add(displayToActual(marker, originX, originY, scale));
@@ -76,7 +77,8 @@ class NavMapConvert {
      * @param scale   navMap.getScale()
      * @return The 'MarkerList' Of Coordinates For Displaying
      */
-    private static List<Marker> actualToDisplay(List<Marker> markers, float originX, float originY, float scale) {
+    private static List<Marker>
+    actualToDisplay(List<Marker> markers, float originX, float originY, float scale) {
         LinkedList<Marker> markerList = new LinkedList<>();
         for (Marker marker : markers) {
             markerList.add(actualToDisplay(marker, originX, originY, scale));

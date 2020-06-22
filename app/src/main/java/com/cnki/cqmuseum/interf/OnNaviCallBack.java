@@ -7,4 +7,6 @@ public interface OnNaviCallBack {
     void onSuccess();
 
     void onFailed();
+
+    void setLocationName(String locationName);
 }

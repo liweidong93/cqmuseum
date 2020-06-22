@@ -113,43 +113,8 @@
             android:layout_marginTop="63px"
             android:layout_centerHorizontal="true"/>
 
-        <include
-            android:id="@+id/include_guide_point6"
-            layout="@layout/include_guidepoint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/include_guide_point1"
-            android:layout_marginTop="63px"
-            android:layout_marginLeft="55px"/>
-
-        <include
-            android:id="@+id/include_guide_point7"
-            layout="@layout/include_guidepoint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/include_guide_point6"
-            android:layout_marginTop="28px"
-            android:layout_marginLeft="55px"/>
-
-        <include
-            android:id="@+id/include_guide_point8"
-            layout="@layout/include_guidepoint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/include_guide_point5"
-            android:layout_marginTop="28px"
-            android:layout_centerHorizontal="true"/>
 
 
-        <include
-            android:id="@+id/include_guide_point9"
-            layout="@layout/include_guidepoint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/include_guide_point4"
-            android:layout_marginTop="28px"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="50px"/>
 
 
 

@@ -1,6 +1,7 @@
 package com.cnki.cqmuseum.ui.navigation;
 
 import android.os.Handler;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 
@@ -9,11 +10,25 @@ import com.cnki.cqmuseum.base.BaseActivity;
 import com.cnki.cqmuseum.constant.IntentActionConstant;
 import com.cnki.cqmuseum.interf.OnMarkerCallBack;
 import com.cnki.cqmuseum.interf.OnNaviCallBack;
+import com.cnki.cqmuseum.manager.NavigationManagerCompat;
 import com.cnki.cqmuseum.manager.RobotManager;
+import com.cnki.cqmuseum.utils.TextStyleUtils;
+import com.ubtrobot.Robot;
 import com.ubtrobot.async.DoneCallback;
 import com.ubtrobot.async.FailCallback;
+import com.ubtrobot.async.ProgressCallback;
+import com.ubtrobot.async.ProgressivePromise;
+import com.ubtrobot.navigation.Location;
 import com.ubtrobot.navigation.Marker;
+import com.ubtrobot.navigation.NavMap;
+import com.ubtrobot.navigation.NavMapException;
+import com.ubtrobot.navigation.NavigationException;
+import com.ubtrobot.navigation.NavigationProgress;
 import com.ubtrobot.speech.SynthesisException;
+
+import java.util.List;
+
+import static com.cnki.cqmuseum.manager.RobotManager.startNavigation;
 
 public class NavigationActivity extends BaseActivity<NavigationPresenter> implements INavigationView {
 
@@ -21,7 +36,7 @@ public class NavigationActivity extends BaseActivity<NavigationPresenter> implem
     private String location;
     private boolean isOriginalListen;
     private TextView mTextViewTip;
-    private String id;
+    private ProgressivePromise<Void, NavigationException, NavigationProgress> mNavigationPromise;
 
     @Override
     public NavigationPresenter initPresenter() {
@@ -47,6 +62,7 @@ public class NavigationActivity extends BaseActivity<NavigationPresenter> implem
             }
         });
         mTextViewTip = findViewById(R.id.tv_navigation_tip);
+        mTextViewTip.setMovementMethod(ScrollingMovementMethod.getInstance());
     }
 
     @Override
@@ -56,57 +72,35 @@ public class NavigationActivity extends BaseActivity<NavigationPresenter> implem
             RobotManager.isListen = false;
         }
         location = getIntent().getStringExtra(IntentActionConstant.NAVI_LOCATION);
-        //根据位置点名称获取marker
-        RobotManager.getMarkerByName(location, new OnMarkerCallBack() {
+        RobotManager.getCurrentMap(location, new OnNaviCallBack() {
             @Override
-            public void onSucess(Marker marker) {
-                //开始导航
-                RobotManager.startNavigation(marker, new OnNaviCallBack() {
-                    @Override
-                    public void onSuccess() {
-                        mTextViewTip.setText("您好，“" + location + "”已经到了");
-                        RobotManager.speak("您好" + location + "已经到了" + "您好" + location + "已经到了" + "您好" + location + "已经到了")
-                                .done(new DoneCallback<Void>() {
-                                    @Override
-                                    public void onDone(Void aVoid) {
-                                        NavigationActivity.this.finish();
-                                    }
-                                })
-                                .fail(new FailCallback<SynthesisException>() {
-                                    @Override
-                                    public void onFail(SynthesisException e) {
-                                        NavigationActivity.this.finish();
-                                    }
-                                });
-                    }
-
-                    @Override
-                    public void onFailed() {
-                        //导航失败，退出界面
-                        RobotManager.speak("导航异常，请先对我进行定位").done(new DoneCallback<Void>() {
+            public void onSuccess() {
+                mTextViewTip.setText("您好，“" + location + "”已经到了");
+                RobotManager.speak("您好" + location + "已经到了" + "您好" + location + "已经到了" + "您好" + location + "已经到了")
+                        .done(new DoneCallback<Void>() {
                             @Override
                             public void onDone(Void aVoid) {
                                 NavigationActivity.this.finish();
                             }
-                        }).fail(new FailCallback<SynthesisException>() {
+                        })
+                        .fail(new FailCallback<SynthesisException>() {
                             @Override
                             public void onFail(SynthesisException e) {
                                 NavigationActivity.this.finish();
                             }
                         });
-                    }
-                });
             }
 
             @Override
-            public void failed() {
-                //获取位置点失败，退出界面
+            public void onFailed() {
+                //导航失败，退出界面
                 NavigationActivity.this.finish();
             }
 
             @Override
-            public void setMsg(String msg) {
-                mTextViewTip.setText(msg);
+            public void setLocationName(String locationName) {
+                location = locationName;
+                mTextViewTip.setText("我将要带您前往" + locationName);
             }
         });
     }

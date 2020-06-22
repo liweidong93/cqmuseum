@@ -20,6 +20,8 @@ import com.cnki.cqmuseum.ui.guide.GuideActivity;
 import com.cnki.cqmuseum.ui.navigation.NavigationActivity;
 import com.cnki.cqmuseum.utils.LogUtils;
 import com.cnki.cqmuseum.utils.TextStyleUtils;
+import com.ubtechinc.cruzr.media_sdk.manager.MediaPlayManager;
+import com.ubtechinc.cruzr.media_sdk.manager.MusicStatusListener;
 import com.ubtrobot.Robot;
 import com.ubtrobot.async.CancelledCallback;
 import com.ubtrobot.async.DoneCallback;
@@ -40,7 +42,6 @@ import com.ubtrobot.navigation.Marker;
 import com.ubtrobot.navigation.NavMap;
 import com.ubtrobot.navigation.NavMapException;
 import com.ubtrobot.navigation.NavigationException;
-import com.ubtrobot.navigation.NavigationManager;
 import com.ubtrobot.navigation.NavigationProgress;
 import com.ubtrobot.orchestration.OrchestrationManager;
 import com.ubtrobot.orchestration.OrchestrationUris;
@@ -58,6 +59,7 @@ import com.ubtrobot.speech.UnderstandingResult;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.List;
@@ -216,20 +218,10 @@ public class RobotManager {
                             || recognitionProgress.getTextResult().startsWith("小志带我去") || recognitionProgress.getTextResult().startsWith("乔治带我去")
                             || recognitionProgress.getTextResult().startsWith("小子带我去")){
                         if (isListen){
-                            getMarkerName(recognitionProgress.getTextResult(), new OnLocationCallBack() {
-                                @Override
-                                public void onSuccess(String markerName, String id) {
-                                    //跳转到导航页面
-                                    Intent intent = new Intent(context, NavigationActivity.class);
-                                    intent.putExtra(IntentActionConstant.NAVI_LOCATION, markerName);
-                                    context.startActivity(intent);
-                                }
-
-                                @Override
-                                public void onFailed() {
-
-                                }
-                            });
+                            //跳转到导航页面
+                            Intent intent = new Intent(context, NavigationActivity.class);
+                            intent.putExtra(IntentActionConstant.NAVI_LOCATION, recognitionProgress.getTextResult());
+                            context.startActivity(intent);
                         }
                         return;
                     }
@@ -311,6 +303,22 @@ public class RobotManager {
                         //显示表情
                         expressEmotion(EmotionUris.LOVE);
                         return;
+                    case RobotDomainConstant.CHAT:
+//                    {"data":{"show_type":1,"show_content":"face_smile","motion":"0"},"appid":"1002","reply":"我是知网小智","intent":"你叫什么名字"}
+                        String json = understandingResult.getSpeechFulfillment().getText();
+                        try {
+                            JSONObject jsonObject = new JSONObject(json);
+                            if (jsonObject != null){
+                                String reply = jsonObject.getString("reply");
+                                if (!TextUtils.isEmpty(reply)){
+                                    speak(reply);
+                                    return;
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                       break;
                 }
                 String robotMsg = "";
                 //判断机器人答案是否为空
@@ -414,9 +422,32 @@ public class RobotManager {
                     @Override
                     public void onDone(Void aVoid) {
                         String fileName = lists[0];
-                        Intent intent = new Intent("com.ubt.cruzr.START_TASK");
-                        intent.putExtra("data",new String[]{"/sdcard/Music/" + fileName});
-                        context.sendBroadcast(intent);
+                        try {
+                            MediaPlayManager.getInstance().playMusic("/sdcard/Music/" + fileName, true, "danceApp");
+                            MediaPlayManager.getInstance().addMusicStatusListener(new MusicStatusListener() {
+                                @Override
+                                public void onMusicStart() {
+
+                                }
+
+                                @Override
+                                public void onMusicComplete() {
+                                    try {
+                                        MediaPlayManager.getInstance().stopMusic();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                @Override
+                                public void onMusicStop() {
+
+                                }
+                            });
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
             }
@@ -431,7 +462,6 @@ public class RobotManager {
      */
     public static void getMarkerByName(final String location, final OnMarkerCallBack markerCallBack){
         navigationManager.getCurrentNavMap().done(new DoneCallback<NavMap>() {
-
             @Override
             public void onDone(final NavMap navMap) {
                 getMarkerName(location, new OnLocationCallBack() {
@@ -515,18 +545,17 @@ public class RobotManager {
 
     /**
      * 开始导航
-     * @param decMarker
+     * @param location
      */
-    public static void startNavigation(Marker decMarker, final OnNaviCallBack onNaviCallBack){
-        if (navigatePromise != null){
+    public static void startNavigation(Location location, final OnNaviCallBack onNaviCallBack){
+        if (navigatePromise != null) {
             navigatePromise.cancel();
         }
-        Location location = new Location.Builder(decMarker.getPosition())
-                .setRotation(decMarker.getRotation())
-                .setZ(decMarker.getZ())
-                .build();
-        //导航到某地
-        navigatePromise = navigationManager.navigate(location).done(new DoneCallback<Void>() {
+        navigatePromise = navigationManager.navigate(location).progress(new ProgressCallback<NavigationProgress>() {
+            @Override
+            public void onProgress(NavigationProgress navigationProgress) {
+            }
+        }).done(new DoneCallback<Void>() {
             @Override
             public void onDone(Void aVoid) {
                 navigatePromise = null;
@@ -537,6 +566,7 @@ public class RobotManager {
             @Override
             public void onFail(NavigationException e) {
                 navigatePromise = null;
+                speak("请先对我进行定位");
                 //导航失败
                 onNaviCallBack.onFailed();
             }
@@ -561,6 +591,11 @@ public class RobotManager {
                     public void onFailed() {
 
                     }
+
+                    @Override
+                    public void setLocationName(String locationName) {
+
+                    }
                 });
             }
 
@@ -582,6 +617,58 @@ public class RobotManager {
     public static void stopNavigation(){
         if (navigatePromise != null){
             navigatePromise.cancel();
+        }
+    }
+
+    public static void getCurrentMap(final String location, final OnNaviCallBack onNaviCallBack){
+        navigationManager.getCurrentNavMap()
+                .done(new DoneCallback<NavMap>() {
+                    @Override
+                    public void onDone(NavMap navMap) {
+                        handleMarkerList(navMap, location, onNaviCallBack);
+                    }
+                })
+                .fail(new FailCallback<NavMapException>() {
+                    @Override
+                    public void onFail(NavMapException e) {
+                        handleMarkerList(null, location, onNaviCallBack);
+                    }
+                });
+    }
+
+    private static void handleMarkerList(NavMap navMap, String location, OnNaviCallBack onNaviCallBack) {
+        if (null != navMap) {
+            Marker currentMarker = null;
+            List<Marker> markerList = navMap.getMarkerList();
+            if (markerList.size() > 0) {
+                if (location.contains("被聆听")){
+                    location = location.replaceAll("被聆听", "贝林厅");
+                }
+                for (int i = 0; i < markerList.size(); i++) {
+                    // if (pointName.contains(allMapPointModelByMapName.get(i).getPointName())) { // 原来的方法，用文字来判断
+                    if (TextStyleUtils.toPinyin(location).contains(TextStyleUtils.toPinyin(markerList.get(i).getTitle()))) {
+                        currentMarker = markerList.get(i);
+                        break;
+                    }
+                }
+                if (currentMarker != null){
+                    onNaviCallBack.setLocationName(currentMarker.getTitle());
+                    Location curLocation = new Location.Builder(currentMarker.getPosition())
+                            .setRotation(currentMarker.getRotation())
+                            .setZ(currentMarker.getZ())
+                            .build();
+                    startNavigation(curLocation, onNaviCallBack);
+                }else{
+                    speak("抱歉，我在地图上没有找到您要去的位置点");
+                    onNaviCallBack.onFailed();
+                }
+            }else{
+                speak("抱歉，我在地图上没有找到您要去的位置点");
+                onNaviCallBack.onFailed();
+            }
+        }else{
+            speak("您还没有对我设置地图，请先对我设置地图");
+            onNaviCallBack.onFailed();
         }
     }
 

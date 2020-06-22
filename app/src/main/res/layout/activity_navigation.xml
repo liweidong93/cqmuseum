@@ -15,6 +15,7 @@
         android:layout_centerHorizontal="true"
         android:textColor="#528b23"
         android:textSize="46px"
+        android:scrollbars="vertical"
         android:layout_marginTop="100px"
         />
 

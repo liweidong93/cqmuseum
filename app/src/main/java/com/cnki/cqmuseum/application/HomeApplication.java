@@ -5,7 +5,12 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.cnki.cqmuseum.manager.RobotManager;
+import com.ubtechinc.cruzr.assistant.sdk.AssistantManager;
+import com.ubtechinc.cruzr.media_sdk.manager.MediaPlayManager;
+import com.ubtechinc.cruzr.sys.cruzrleisure.leisure.LeisureManager;
 import com.ubtrobot.Robot;
+
+import static java.security.AccessController.getContext;
 
 
 /**
@@ -41,7 +46,9 @@ public class HomeApplication extends MultiDexApplication {
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(getApplicationContext());
         //初始化机器人api
-        Robot.initialize(getApplicationContext());
+        Robot.initialize(this);
+        //初始化多媒体服务
+        MediaPlayManager.getInstance().init(getApplicationContext());
         RobotManager.initService();
     }
 

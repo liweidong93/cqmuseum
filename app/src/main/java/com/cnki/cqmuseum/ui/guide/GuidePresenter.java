@@ -66,7 +66,7 @@ public class GuidePresenter extends BasePresenterImpl<IGuideView> {
             return;
         }
         curPos++;
-        if (curPos < guides.size() - 1){
+        if (curPos < guides.size()){
             final Guide guide = guides.get(curPos);
             RobotManager.getMarkerByName(guide.getName(), new OnMarkerCallBack() {
                 @Override
@@ -187,6 +187,11 @@ public class GuidePresenter extends BasePresenterImpl<IGuideView> {
                         }
                     });
             }
+
+            @Override
+            public void setLocationName(String locationName) {
+
+            }
         });
     }
 
@@ -274,6 +279,11 @@ public class GuidePresenter extends BasePresenterImpl<IGuideView> {
                                                 }
                                             });
                                 }
+
+                                @Override
+                                public void setLocationName(String locationName) {
+
+                                }
                             });
                         }
 
@@ -312,7 +322,7 @@ public class GuidePresenter extends BasePresenterImpl<IGuideView> {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                RobotManager.speak("需要我返回接待点吗？")
+                RobotManager.speak("需要我返回迎宾点吗？")
                     .done(new DoneCallback<Void>() {
                         @Override
                         public void onDone(Void aVoid) {
@@ -322,7 +332,7 @@ public class GuidePresenter extends BasePresenterImpl<IGuideView> {
                                 public void run() {
                                     //判断是否需要返回接待点
                                     if (GuideActivity.isNeedGoHome){
-                                        RobotManager.goPoint("接待点");
+                                        RobotManager.goPoint("迎宾点");
                                     }
                                     ((GuideActivity)mContext).finish();
                                 }

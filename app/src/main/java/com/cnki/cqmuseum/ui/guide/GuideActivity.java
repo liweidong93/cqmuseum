@@ -35,7 +35,7 @@ public class GuideActivity extends BaseActivity<GuidePresenter> implements IGuid
     //游览路线
     private ArrayList<Guide> guideRoutes;
     //将要去的位置点
-    private String goPoint = "接待点";
+    private String goPoint = "迎宾点";
     private ImageView mImageViewGuideIcon;
     private ImageView mImageViewPic;
     private ScrollView mScrollViewIntroduce;
@@ -193,18 +193,6 @@ public class GuideActivity extends BaseActivity<GuidePresenter> implements IGuid
             case R.id.include_guide_point5:
                 index = 4;
                 break;
-            case R.id.include_guide_point6:
-                index = 5;
-                break;
-            case R.id.include_guide_point7:
-                index = 6;
-                break;
-            case R.id.include_guide_point8:
-                index = 7;
-                break;
-            case R.id.include_guide_point9:
-                index = 8;
-                break;
         }
         goPoint = guideRoutes.get(index).getName();
         goPoint(goPoint);
@@ -216,24 +204,16 @@ public class GuideActivity extends BaseActivity<GuidePresenter> implements IGuid
      */
     private void createGuideRoute(){
         guideRoutes = new ArrayList<>();
-        Guide jiedai = new Guide("接待点", "http://qa2.cnki.net/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", "这里是接待点", (RelativeLayout) findViewById(R.id.include_guide_point1));
+        Guide jiedai = new Guide("迎宾点", "http://qa2.cnki.net/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", "这里是迎宾点", (RelativeLayout) findViewById(R.id.include_guide_point1));
         guideRoutes.add(jiedai);
-        Guide guide1 = new Guide("恐龙馆", "http://qa2.cnki.net/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", GuideWords.DINOSAUR,(RelativeLayout) findViewById(R.id.include_guide_point2));
+        Guide guide1 = new Guide("特展厅", "https://www.cmnh.org.cn/upLoad/news/month_1609/201609222119537197.jpg", "这里是特展厅",(RelativeLayout) findViewById(R.id.include_guide_point2));
         guideRoutes.add(guide1);
-        Guide guide2 = new Guide("岩石馆", "http://qa2.cnki.net/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", GuideWords.ROCK,(RelativeLayout) findViewById(R.id.include_guide_point3));
+        Guide guide2 = new Guide("贝林厅", "https://www.cmnh.org.cn/upLoad/news/month_1609/201609222112067287.jpg", "感谢肯尼斯·贝林先生，捐赠丰富的野生动物标本，让我们亲历一场寰球动物嘉年华。这里，各大洲的自然风光辽阔壮美，生机勃发；这里，各种动物标本千姿百态，栩栩如生；这里，生物之间的依存关系描摹生动，耐人寻味。动物和谐，环境和谐，自然和谐，大美无言。多种多样的生物是大自然赐予人类的宝贵财富。它们是人类赖以生存的资源，更是生态系统的重要成员，是一座座独特的基因库，是我们在这颗美丽星球上生存的伙伴。",(RelativeLayout) findViewById(R.id.include_guide_point3));
         guideRoutes.add(guide2);
-        Guide guide3 = new Guide("化石馆", "http://qa2.cnki.net/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", GuideWords.FOSSIC,(RelativeLayout) findViewById(R.id.include_guide_point4));
+        Guide guide3 = new Guide("重庆厅", "https://www.cmnh.org.cn/upLoad/news/month_1609/201609222114431724.jpg", "重庆，一座山水交融的城市，处于我国地理大格局南北、东西分界的交汇地带。亿万年来，强烈的造山运动所引起的海陆变迁及江河发育，造就了今日重庆奇特的山川形貌，并孕育了丰富的物产资源。重庆有着许多远古的印痕，大江大河串连起众多古遗址，三峡地区是古人类演化的重要通道。半山半水间，从远古到现代，重庆人一路艰辛，在利用自然的过程中，形成了尊崇自然、适应自然、自然优先的城市发展理念；这将引领重庆向更美好的未来迈进。",(RelativeLayout) findViewById(R.id.include_guide_point4));
         guideRoutes.add(guide3);
-        Guide guide4 = new Guide("文化馆", "http://qa2.cnki.net/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", "这里是文化馆",(RelativeLayout) findViewById(R.id.include_guide_point5));
+        Guide guide4 = new Guide("恐龙厅", "https://www.cmnh.org.cn/upLoad/news/month_1609/201609222115562723.jpg", "这是一个失落的世界，它的统治者早已绝迹，只留下深埋在岩层中的骨骼化石，讲述着一段跨越一亿六千万年的壮美故事。恐龙是中生代地球的主宰，为了生息繁衍，它们曾不断改变着自身，同时也改变着地球的生态，谱写了一段生物演化的宏大诗篇。恐龙种类繁多，形态千奇百怪；足迹曾遍布大地，在各大洲竞相发展。但就是这个盛极一时的族群却突然退出了生命的舞台，留下难解的谜题吸引人们去探寻，解答。穿越时空，这里将呈现一个不一样的世界！",(RelativeLayout) findViewById(R.id.include_guide_point5));
         guideRoutes.add(guide4);
-        Guide guide5 = new Guide("美术馆", "http://qa2.cnki.net/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", "这里是美术馆",(RelativeLayout) findViewById(R.id.include_guide_point6));
-        guideRoutes.add(guide5);
-        Guide guide6 = new Guide("动物馆", "http://qa2.cnki.net/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", "这里是动物馆",(RelativeLayout) findViewById(R.id.include_guide_point7));
-        guideRoutes.add(guide6);
-        Guide guide7 = new Guide("植物馆", "http://qa2.cnki.net/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", "这里是植物馆",(RelativeLayout) findViewById(R.id.include_guide_point8));
-        guideRoutes.add(guide7);
-        Guide guide8 = new Guide("水生动物馆", "http://qa2.cnki.net/YuMNHShow/admin/file/faq/大熊猫/cqzrbwg27.jpg", "这里是水生动物馆",(RelativeLayout) findViewById(R.id.include_guide_point9));
-        guideRoutes.add(guide8);
     }
 
     @Override
@@ -269,6 +249,7 @@ public class GuideActivity extends BaseActivity<GuidePresenter> implements IGuid
             @Override
             public void run() {
                 mScrollViewIntroduce.setVisibility(View.GONE);
+                mImageViewPic.setVisibility(View.GONE);
                 mImageViewGuideIcon.setVisibility(View.VISIBLE);
                 mImageViewGuideIcon.setImageResource(R.mipmap.icon_guide_goicon);
                 //通知UI改变
@@ -286,6 +267,7 @@ public class GuideActivity extends BaseActivity<GuidePresenter> implements IGuid
                 //到达后通知，改变成图文形式
                 mImageViewGuideIcon.setVisibility(View.GONE);
                 mScrollViewIntroduce.setVisibility(View.VISIBLE);
+                mImageViewPic.setVisibility(View.VISIBLE);
                 GlideUtils.loadPic(GuideActivity.this, guide.getPic(), mImageViewPic);
                 mTextViewName.setText(guide.getName());
                 mTextViewIntroduce.setText(guide.getIntroduce());

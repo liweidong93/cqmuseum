@@ -4,11 +4,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
-import com.cnki.cqmuseum.interf.OnLocationCallBack;
-import com.cnki.cqmuseum.utils.TextStyleUtils;
+import com.ubtrobot.async.CancelledCallback;
 import com.ubtrobot.async.Consumer;
-import com.ubtrobot.async.DoneCallback;
-import com.ubtrobot.async.FailCallback;
 import com.ubtrobot.async.Function;
 import com.ubtrobot.async.ListenerList;
 import com.ubtrobot.async.ProgressivePromise;
@@ -22,7 +19,6 @@ import com.ubtrobot.navigation.LocatingProgress;
 import com.ubtrobot.navigation.Location;
 import com.ubtrobot.navigation.LocationException;
 import com.ubtrobot.navigation.LocationListener;
-import com.ubtrobot.navigation.Marker;
 import com.ubtrobot.navigation.NavMap;
 import com.ubtrobot.navigation.NavMapException;
 import com.ubtrobot.navigation.NavMapProvider;
@@ -44,7 +40,7 @@ public class NavigationManagerCompat implements Navigator, NavMapProvider {
     private RobotContext mContext;
     private NavigationManager mManager;
 
-    private boolean mNeedCompat = TextUtils.equals(Build.VERSION, "2.5.2");
+    private boolean mNeedCompat = TextUtils.equals(Build.VERSION, "2.7.0");
 
     private final ListenerList<LocationListener> mListeners = new ListenerList<>(
             new Handler(Looper.getMainLooper()));
@@ -62,8 +58,9 @@ public class NavigationManagerCompat implements Navigator, NavMapProvider {
             return this.mManager.getNavMapList();
         }
 
-        return PromiseOperators.mapDone(
-                this.mManager.getNavMapList(),
+        final Promise<List<NavMap>, NavMapException> promise = this.mManager.getNavMapList();
+
+        return PromiseOperators.mapDone(promise,
                 new Function<List<NavMap>, List<NavMap>, NavMapException>() {
                     @Override
                     public List<NavMap> apply(List<NavMap> navMaps) throws NavMapException {
@@ -75,7 +72,12 @@ public class NavigationManagerCompat implements Navigator, NavMapProvider {
 
                         return newMaps;
                     }
-                });
+                }).cancelled(new CancelledCallback() {
+            @Override
+            public void onCancelled() {
+                promise.cancel();
+            }
+        });
     }
 
     @Override
@@ -84,15 +86,21 @@ public class NavigationManagerCompat implements Navigator, NavMapProvider {
             return this.mManager.getNavMap(navMapId);
         }
 
-        return PromiseOperators.mapDone(
-                this.mManager.getNavMap(navMapId),
+        final Promise<NavMap, NavMapException> promise = this.mManager.getNavMap(navMapId);
+
+        return PromiseOperators.mapDone(promise,
                 new Function<NavMap, NavMap, NavMapException>() {
                     @Override
                     public NavMap apply(NavMap backMap) throws NavMapException {
                         //Returned Data Is Just for Display, Converted To Actual Data
                         return NavMapConvert.convertToActual(backMap);
                     }
-                });
+                }).cancelled(new CancelledCallback() {
+            @Override
+            public void onCancelled() {
+                promise.cancel();
+            }
+        });
     }
 
     @Override
@@ -101,16 +109,22 @@ public class NavigationManagerCompat implements Navigator, NavMapProvider {
             return this.mManager.addNavMap(navMap);
         }
 
-        return PromiseOperators.mapDone(
-                //The Incoming Is Actual Data, Converted To Display Data
-                this.mManager.addNavMap(NavMapConvert.convertToDisplay(navMap)),
+        //The Incoming Is Actual Data, Converted To Display Data
+        final Promise<NavMap, NavMapException> promise = this.mManager.addNavMap(NavMapConvert.convertToDisplay(navMap));
+
+        return PromiseOperators.mapDone(promise,
                 new Function<NavMap, NavMap, NavMapException>() {
                     @Override
                     public NavMap apply(NavMap backMap) throws NavMapException {
                         //Returned Data Is Just for Display, Converted To Actual Data
                         return NavMapConvert.convertToActual(backMap);
                     }
-                });
+                }).cancelled(new CancelledCallback() {
+            @Override
+            public void onCancelled() {
+                promise.cancel();
+            }
+        });
     }
 
     @Override
@@ -119,16 +133,22 @@ public class NavigationManagerCompat implements Navigator, NavMapProvider {
             return this.mManager.modifyNavMap(navMap);
         }
 
-        return PromiseOperators.mapDone(
-                //The Incoming Is Actual Data, Converted To Display Data
-                this.mManager.modifyNavMap(NavMapConvert.convertToDisplay(navMap)),
+        //The Incoming Is Actual Data, Converted To Display Data
+        final Promise<NavMap, NavMapException> promise = this.mManager.modifyNavMap(NavMapConvert.convertToDisplay(navMap));
+
+        return PromiseOperators.mapDone(promise,
                 new Function<NavMap, NavMap, NavMapException>() {
                     @Override
                     public NavMap apply(NavMap backMap) throws NavMapException {
                         //Returned Data Is Just for Display, Converted To Actual Data
                         return NavMapConvert.convertToActual(backMap);
                     }
-                });
+                }).cancelled(new CancelledCallback() {
+            @Override
+            public void onCancelled() {
+                promise.cancel();
+            }
+        });
     }
 
     @Override
@@ -137,15 +157,21 @@ public class NavigationManagerCompat implements Navigator, NavMapProvider {
             return this.mManager.removeNavMap(navMapId);
         }
 
-        return PromiseOperators.mapDone(
-                this.mManager.removeNavMap(navMapId),
+        final Promise<NavMap, NavMapException> promise = this.mManager.removeNavMap(navMapId);
+
+        return PromiseOperators.mapDone(promise,
                 new Function<NavMap, NavMap, NavMapException>() {
                     @Override
                     public NavMap apply(NavMap backMap) throws NavMapException {
                         //Returned Data Is Just for Display, Converted To Actual Data
                         return NavMapConvert.convertToActual(backMap);
                     }
-                });
+                }).cancelled(new CancelledCallback() {
+            @Override
+            public void onCancelled() {
+                promise.cancel();
+            }
+        });
     }
 
     @Override
@@ -154,15 +180,21 @@ public class NavigationManagerCompat implements Navigator, NavMapProvider {
             return this.mManager.setCurrentNavMap(navMapId);
         }
 
-        return PromiseOperators.mapDone(
-                this.mManager.setCurrentNavMap(navMapId),
+        final Promise<NavMap, NavMapException> promise = this.mManager.setCurrentNavMap(navMapId);
+
+        return PromiseOperators.mapDone(promise,
                 new Function<NavMap, NavMap, NavMapException>() {
                     @Override
                     public NavMap apply(NavMap backMap) throws NavMapException {
                         //Returned Data Is Just for Display, Converted To Actual Data
                         return NavMapConvert.convertToActual(backMap);
                     }
-                });
+                }).cancelled(new CancelledCallback() {
+            @Override
+            public void onCancelled() {
+                promise.cancel();
+            }
+        });
     }
 
     @Override
@@ -171,15 +203,21 @@ public class NavigationManagerCompat implements Navigator, NavMapProvider {
             return this.mManager.getCurrentNavMap();
         }
 
-        return PromiseOperators.mapDone(
-                this.mManager.getCurrentNavMap(),
+        final Promise<NavMap, NavMapException> promise = this.mManager.getCurrentNavMap();
+
+        return PromiseOperators.mapDone(promise,
                 new Function<NavMap, NavMap, NavMapException>() {
                     @Override
                     public NavMap apply(NavMap backMap) throws NavMapException {
                         //Returned Data Is Just for Display, Converted To Actual Data
                         return NavMapConvert.convertToActual(backMap);
                     }
-                });
+                }).cancelled(new CancelledCallback() {
+            @Override
+            public void onCancelled() {
+                promise.cancel();
+            }
+        });
     }
 
     @Override
@@ -188,15 +226,21 @@ public class NavigationManagerCompat implements Navigator, NavMapProvider {
             return this.mManager.unsetCurrentNavMap();
         }
 
-        return PromiseOperators.mapDone(
-                this.mManager.unsetCurrentNavMap(),
+        final Promise<NavMap, NavMapException> promise = this.mManager.unsetCurrentNavMap();
+
+        return PromiseOperators.mapDone(promise,
                 new Function<NavMap, NavMap, NavMapException>() {
                     @Override
                     public NavMap apply(NavMap backMap) throws NavMapException {
                         //Returned Data Is Just for Display, Converted To Actual Data
                         return NavMapConvert.convertToActual(backMap);
                     }
-                });
+                }).cancelled(new CancelledCallback() {
+            @Override
+            public void onCancelled() {
+                promise.cancel();
+            }
+        });
     }
 
     @Override
@@ -220,8 +264,9 @@ public class NavigationManagerCompat implements Navigator, NavMapProvider {
             return this.mManager.locateSelf();
         }
 
-        return ProgressivePromiseOperators.mapDone(
-                this.mManager.locateSelf(),
+        final ProgressivePromise<Location, LocatingException, LocatingProgress> promise = this.mManager.locateSelf();
+
+        return ProgressivePromiseOperators.mapDone(promise,
                 new Function<Location, Location, LocatingException>() {
                     @Override
                     public Location apply(Location location) throws LocatingException {
@@ -234,16 +279,22 @@ public class NavigationManagerCompat implements Navigator, NavMapProvider {
                                 .build();
                     }
                 }
-        );
+        ).cancelled(new CancelledCallback() {
+            @Override
+            public void onCancelled() {
+                promise.cancel();
+            }
+        });
     }
 
     @Override
-    public ProgressivePromise<Location, LocatingException, LocatingProgress> locateSelf(LocatingOption option) {
+    public ProgressivePromise<Location, LocatingException, LocatingProgress>
+    locateSelf(LocatingOption option) {
         if (!mNeedCompat) {
             return this.mManager.locateSelf(option);
         }
 
-        return ProgressivePromiseOperators.mapDone(
+        final ProgressivePromise<Location, LocatingException, LocatingProgress> promise =
                 this.mManager.locateSelf(new LocatingOption.Builder()
                         .setNearby(new Location.Builder(new Point(
                                 //Incoming Is Meters, Converted To Centimeters
@@ -253,7 +304,9 @@ public class NavigationManagerCompat implements Navigator, NavMapProvider {
                                 .setZ(option.getNearby().getZ())
                                 .build())
                         .setTimeout(option.getTimeout())
-                        .build()),
+                        .build());
+
+        return ProgressivePromiseOperators.mapDone(promise,
                 new Function<Location, Location, LocatingException>() {
                     @Override
                     public Location apply(Location location) throws LocatingException {
@@ -266,7 +319,12 @@ public class NavigationManagerCompat implements Navigator, NavMapProvider {
                                 .build();
                     }
                 }
-        );
+        ).cancelled(new CancelledCallback() {
+            @Override
+            public void onCancelled() {
+                promise.cancel();
+            }
+        });
     }
 
     @Override
@@ -279,21 +337,23 @@ public class NavigationManagerCompat implements Navigator, NavMapProvider {
         return this.mManager.isSelfLocated();
     }
 
-    public ProgressivePromise<Void, NavigationException, NavigationProgress> navigate(Location destination) {
+    public ProgressivePromise<Void, NavigationException, NavigationProgress>
+    navigate(Location destination) {
         if (!mNeedCompat) {
             return this.mManager.navigate(destination);
         }
 
-        return ProgressivePromiseOperators.mapProgress(
-                this.mManager.navigate(
-                        new NavigationOption.Builder(
-                                new Location.Builder(new Point(
-                                        //Incoming Is Meters, Converted To Centimeters
-                                        destination.getPosition().getX() * NavMapConvert.DECIMAL,
-                                        destination.getPosition().getY() * NavMapConvert.DECIMAL))
-                                        .setRotation(destination.getRotation())
-                                        .setZ(destination.getZ())
-                                        .build()).build()),
+        final ProgressivePromise<Void, NavigationException, NavigationProgress> promise = this.mManager.navigate(
+                new NavigationOption.Builder(
+                        new Location.Builder(new Point(
+                                //Incoming Is Meters, Converted To Centimeters
+                                destination.getPosition().getX() * NavMapConvert.DECIMAL,
+                                destination.getPosition().getY() * NavMapConvert.DECIMAL))
+                                .setRotation(destination.getRotation())
+                                .setZ(destination.getZ())
+                                .build()).build());
+
+        return ProgressivePromiseOperators.mapProgress(promise,
                 new Function<NavigationProgress, NavigationProgress, NavigationException>() {
                     @Override
                     public NavigationProgress apply(NavigationProgress progress) throws NavigationException {
@@ -308,16 +368,22 @@ public class NavigationManagerCompat implements Navigator, NavMapProvider {
                                 .build();
                     }
                 }
-        );
+        ).cancelled(new CancelledCallback() {
+            @Override
+            public void onCancelled() {
+                promise.cancel();
+            }
+        });
     }
 
     @Override
-    public ProgressivePromise<Void, NavigationException, NavigationProgress> navigate(NavigationOption option) {
+    public ProgressivePromise<Void, NavigationException, NavigationProgress>
+    navigate(NavigationOption option) {
         if (!mNeedCompat) {
             return this.mManager.navigate(option);
         }
 
-        return ProgressivePromiseOperators.mapProgress(
+        final ProgressivePromise<Void, NavigationException, NavigationProgress> promise =
                 this.mManager.navigate(new NavigationOption.Builder(
                         new Location.Builder(new Point(
                                 //Incoming Is Meters, Converted To Centimeters
@@ -330,7 +396,9 @@ public class NavigationManagerCompat implements Navigator, NavMapProvider {
                         .setTrackMode(option.isTrackMode())
                         .setRetryCount(option.getRetryCount())
                         .setRetryInterval(option.getRetryInterval())
-                        .build()),
+                        .build());
+
+        return ProgressivePromiseOperators.mapProgress(promise,
                 new Function<NavigationProgress, NavigationProgress, NavigationException>() {
                     @Override
                     public NavigationProgress apply(NavigationProgress progress) throws NavigationException {
@@ -345,7 +413,12 @@ public class NavigationManagerCompat implements Navigator, NavMapProvider {
                                 .build();
                     }
                 }
-        );
+        ).cancelled(new CancelledCallback() {
+            @Override
+            public void onCancelled() {
+                promise.cancel();
+            }
+        });
     }
 
     @Override
@@ -390,22 +463,4 @@ public class NavigationManagerCompat implements Navigator, NavMapProvider {
             }
         }
     };
-
-    /**
-     * 根据标记点名称获取标记点实体
-     * @param navMap
-     * @param markerName
-     * @return
-     */
-    public Marker getMarkerByName(NavMap navMap,String markerName){
-        List<Marker> markerList = navMap.getMarkerList();
-        if (markerList != null && markerList.size() != 0){
-            for (Marker marker : markerList){
-                if (marker.getTitle().equals(markerName)){
-                    return marker;
-                }
-            }
-        }
-        return null;
-    }
 }

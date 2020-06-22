@@ -9,6 +9,7 @@ public class RobotDomainConstant {
     public static final String HUG = "拥抱";
     public static final String SING = "/music/play";
     public static final String DANCE = "/dance/play/random";
+    public static final String CHAT = "/chat/fallback";
     public static final String CIRCLE = "转圈";
     public static final String WEATHER = "/intent/weather";
 }
